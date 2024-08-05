@@ -1,0 +1,748 @@
+openapi: 3.0.3
+info:
+  title: Salesforce Commerce B2B/D2C
+  description: "# Salesforce Commerce B2B/D2C APIs\n\nThis postman collection contains API endpoints from various Salesforce Commerce B2B/D2C API domains.\n\n## Get started\n\nFollow [this documentation](https://github.com/forcedotcom/postman-salesforce-apis) to get started with Salesforce Postman collections.\n\n**⚠️ Disclaimers:**\n\n- This collection is provided as-is. It's not officially supported by Salesforce or covered by SLAs.\n- API documentation is not provided with the collection. Please refer to the [official documentation](https://developer.salesforce.com/docs).\n- The documentation for the majority of the endpoints in this collection can be found in the [B2B/D2C section of the Connect API documentation](https://developer.salesforce.com/docs/atlas.en-us.chatterapi.meta/chatterapi/connect_resources_commerce.htm).\n    \n\nℹ️ Report issues and ask questions [here](https://github.com/forcedotcom/postman-salesforce-apis/issues).\n\n**Though not strictly required to use the collection, for ease of use some APIs in the collection assume data found in a commerce B2B/D2C trial webstore created through the SFDX commerce plugin. For more information on how to create a trial webstore please see** [How to Create Scratch Orgs and Stores](https://github.com/forcedotcom/commerce-on-lightning/blob/develop/docs/setup-guide.md).\n\n## Variables Reference\n\nThe collection relies on the following variables:\n\n**Note:** Not every folder needs all of the variables. Look at the documentation of each folder for specific details\n\n| Variable | Description | Where to find it? (Some assume trial webstore) |\n| --- | --- | --- |\n| `orgUrl` | The base URL for the Salesforce org. | Through the following SFDX command :  <br>`sfdx force:org:display -u` . The orgUrl is the _Instance Url_ in the response. |\n| `orgId` | Salesforce org Id. | Use the _**Login org admin (SOAP)**_ endpoint under _**Setup Queries**_ folder to return the id. (This uses `orgUsername` and `orgPassword`) |\n| `orgUsername` | Org administrator username | Specified when the org was created. |\n| `orgPassword` | Org administrator password | Specified when the org was created. |\n| `apiVersion` | The Salesforce API version (e.g.: 57.0). | Log into the org -> Go to Setup -> type \"apex classes\" in the Quick Find box >> click New in the \"Apex Classes\" page -> click on the \"Version Setting\" tab to see all the supported versions |\n| `webstoreName` | The name of the webstore. | Specified at webstore creation time. |\n| `webstoreId` | The Id of the webstore. | Use the _**Get webstore id**_ endpoint under _**Setup Queries**_ folder to return the id. (This uses `webstoreName`) |\n| `buyerUsername` | Registered buyer/shopper username. | Specified when creating the trial webstore. |\n| `buyerPassword` | Registered buyer/shopper password. | Specified when creating the trial webstore. |\n| `buyerAccountId` | Account Id associated with the shopper/buyer. | Use the _**Get buyer account id**_ endpoint under _**Setup Queries**_ folder to return the id. (This uses `buyerUsername`) |\n| `productSearchTerm` | Search term used to find the product. | Defaulted to coffee, which will return results in the trial webstore. |"
+  version: 1.0.0
+  contact: {}
+servers:
+- url: '{{orgUrl}}'
+paths:
+  /services/Soap/u/57.0:
+    post:
+      tags:
+      - Setup Queries
+      summary: Login buyer/shopper (SOAP)
+      description: Authenticate the shopper through the variables _buyerUsername_ and _buyerPassword_. Generated session ID is saved in _accessToken for use in the other calls in the collection.
+      operationId: loginBuyerShopperSoap
+      parameters:
+      - name: soapaction
+        in: header
+        schema:
+          type: string
+          example: login
+      - name: cookie
+        in: header
+        schema:
+          type: string
+          example: BrowserId=POhd6XTZEe2v6_8M7WG26g
+      requestBody:
+        content:
+          text/plain:
+            examples:
+              Login buyer/shopper (SOAP):
+                value: "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" \nxmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://\nwww.w3.org/2001/XMLSchema\">\n    <soap:Header>\n        <LoginScopeHeader xmlns=\"urn:partner.soap.sforce.com\">\n            <organizationId>{{orgId}}</organizationId>\n        </LoginScopeHeader>\n    </soap:Header>\n    <soap:Body>\n        <login xmlns=\"urn:partner.soap.sforce.com\">\n            <username><![CDATA[{{buyerUsername}}]]></username>\n            <password><![CDATA[{{buyerPassword}}]]></password>\n        </login>\n    </soap:Body>\n</soap:Envelope>"
+              Login org admin (SOAP):
+                value: "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" \nxmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://\nwww.w3.org/2001/XMLSchema\">\n    <soap:Body>\n        <login xmlns=\"urn:partner.soap.sforce.com\">\n            <username><![CDATA[{{orgUsername}}]]></username>\n            <password><![CDATA[{{orgPassword}}]]></password>\n        </login>\n    </soap:Body>\n</soap:Envelope>"
+      responses:
+        '200':
+          description: ''
+      security:
+      - {}
+  /services/data/v57.0/commerce/webstores/{webstoreId}/search/product-search:
+    post:
+      tags:
+      - End2End Buyer/Shopper Journey
+      summary: Search products by search term
+      description: Uses the variable _productSearchTerm_ to search for products in the webstore. Sets the first returned product in the variable _productId_.
+      operationId: searchProductsBySearchTerm
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                searchTerm:
+                  type: string
+                  example: coffee
+            examples:
+              Search products by search term:
+                value:
+                  searchTerm: coffee
+      responses:
+        '200':
+          description: ''
+      security:
+      - bearerAuth: []
+    parameters:
+    - name: webstoreId
+      in: path
+      required: true
+      schema:
+        type: string
+  /services/data/v57.0/commerce/webstores/{webstoreId}/products/{productId}:
+    get:
+      tags:
+      - End2End Buyer/Shopper Journey
+      summary: Get product
+      description: Fetch standard field data, custom field data, and enrichment data for a single Product, identified by the variable _productId_ that was set by the search products request.
+      operationId: getProduct
+      parameters:
+      - name: effectiveAccountId
+        in: query
+        schema:
+          type: string
+          example: <string>
+      - name: excludeAttributeSetInfo
+        in: query
+        schema:
+          type: string
+          example: <boolean>
+      - name: excludeEntitlementDetails
+        in: query
+        schema:
+          type: string
+          example: <boolean>
+      - name: excludeFields
+        in: query
+        schema:
+          type: string
+          example: <boolean>
+      - name: excludeMedia
+        in: query
+        schema:
+          type: string
+          example: <boolean>
+      - name: excludePrimaryProductCategory
+        in: query
+        schema:
+          type: string
+          example: <boolean>
+      - name: excludeProductSellingModels
+        in: query
+        schema:
+          type: string
+          example: <boolean>
+      - name: excludeQuantityRule
+        in: query
+        schema:
+          type: string
+          example: <boolean>
+      - name: excludeVariationInfo
+        in: query
+        schema:
+          type: string
+          example: <boolean>
+      - name: fields
+        in: query
+        schema:
+          type: string
+          example: '[]'
+      - name: mediaGroups
+        in: query
+        schema:
+          type: string
+          example: '[]'
+      responses:
+        '200':
+          description: ''
+      security:
+      - bearerAuth: []
+    parameters:
+    - name: webstoreId
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: productId
+      in: path
+      required: true
+      schema:
+        type: string
+        example: '{{productId}}'
+  /services/data/v57.0/commerce/webstores/{webstoreId}/carts/{cartId}:
+    delete:
+      tags:
+      - End2End Buyer/Shopper Journey
+      summary: Delete cart (if needed)
+      description: 'Delete the Cart, as identified by the variable __cartId_. This variable is set in the _Create a cart_ request. (Note: This request is not needed the first time it is executed.)'
+      operationId: deleteCartIfNeeded
+      responses:
+        '200':
+          description: ''
+      security:
+      - bearerAuth: []
+    parameters:
+    - name: webstoreId
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: cartId
+      in: path
+      required: true
+      schema:
+        type: string
+        example: current
+  /services/data/v57.0/commerce/webstores/{webstoreId}/carts:
+    post:
+      tags:
+      - End2End Buyer/Shopper Journey
+      summary: Create a cart
+      description: Creates a Cart and sets the variable __cartId_.
+      operationId: createACart
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: My Cart
+                type:
+                  type: string
+                  example: Cart
+            examples:
+              Create a cart:
+                value:
+                  name: My Cart
+                  type: Cart
+      responses:
+        '200':
+          description: ''
+      security:
+      - bearerAuth: []
+    parameters:
+    - name: webstoreId
+      in: path
+      required: true
+      schema:
+        type: string
+  /services/data/v57.0/commerce/webstores/{webstoreId}/carts/{cartId}/cart-items:
+    post:
+      tags:
+      - End2End Buyer/Shopper Journey
+      summary: Add item to the cart
+      description: Adds a quantity of 5 items (identified by the variable _productId)_ to the cart (identified by the variable __cartId)._
+      operationId: addItemToTheCart
+      parameters:
+      - name: productFields
+        in: query
+        schema:
+          type: string
+          example: ''
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                productId:
+                  type: string
+                  example: '{{productId}}'
+                quantity:
+                  type: string
+                  example: '5'
+                type:
+                  type: string
+                  example: Product
+            examples:
+              Add item to the cart:
+                value:
+                  productId: '{{productId}}'
+                  quantity: '5'
+                  type: Product
+      responses:
+        '200':
+          description: ''
+      security:
+      - bearerAuth: []
+    parameters:
+    - name: webstoreId
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: cartId
+      in: path
+      required: true
+      schema:
+        type: string
+        example: current
+  /services/data/v57.0/commerce/webstores/{webstoreId}/checkouts/:
+    post:
+      tags:
+      - End2End Buyer/Shopper Journey
+      summary: Create/Start checkout
+      description: Starts a checkout for the cart identified by the variable __cartId_. Sets the checkout identifier in the variable __checkoutId_.
+      operationId: createStartCheckout
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cartId:
+                  type: string
+                  example: current
+            examples:
+              Create/Start checkout:
+                value:
+                  cartId: current
+      responses:
+        '200':
+          description: ''
+      security:
+      - bearerAuth: []
+    parameters:
+    - name: webstoreId
+      in: path
+      required: true
+      schema:
+        type: string
+  /services/data/v57.0/commerce/webstores/{webstoreId}/accounts/{buyerAccountId}/addresses:
+    get:
+      tags:
+      - End2End Buyer/Shopper Journey
+      summary: Get shipping address
+      description: Returns all of the shipping addresses associated with the buyer account identified through the _buyerAccountId_ variable. Sets the __addressId_ variable to the last created shipping address for that buyer account.
+      operationId: getShippingAddress
+      parameters:
+      - name: addressType
+        in: query
+        schema:
+          type: string
+          example: Shipping
+      - name: sortOrder
+        in: query
+        schema:
+          type: string
+          example: CreatedDateDesc
+      - name: excludeUnsupportedCountries
+        in: query
+        schema:
+          type: string
+          example: 'true'
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Get shipping address:
+                value: ''
+      responses:
+        '200':
+          description: ''
+      security:
+      - bearerAuth: []
+    post:
+      tags:
+      - End2End Buyer/Shopper Journey
+      summary: Add shipping address (if address does not exist)
+      description: Adds a shipping address associated with the buyer account (variable _buyerAccountId_) and stores the address identifier into the variable __addressId_.
+      operationId: addShippingAddressIfAddressDoesNotExist
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                addressType:
+                  type: string
+                  example: Shipping
+                city:
+                  type: string
+                  example: Boston
+                country:
+                  type: string
+                  example: US
+                isDefault:
+                  type: boolean
+                  example: false
+                name:
+                  type: string
+                  example: Home Address
+                postalCode:
+                  type: string
+                  example: '01234'
+                region:
+                  type: string
+                  example: MA
+                street:
+                  type: string
+                  example: 1 Milk Street
+            examples:
+              Add shipping address (if address does not exist):
+                value:
+                  addressType: Shipping
+                  city: Boston
+                  country: US
+                  isDefault: false
+                  name: Home Address
+                  postalCode: '01234'
+                  region: MA
+                  street: 1 Milk Street
+      responses:
+        '200':
+          description: ''
+      security:
+      - bearerAuth: []
+    parameters:
+    - name: webstoreId
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: buyerAccountId
+      in: path
+      required: true
+      schema:
+        type: string
+  /services/data/v57.0/commerce/webstores/{webstoreId}/accounts/{buyerAccountId}/addresses/{addressId}:
+    patch:
+      tags:
+      - End2End Buyer/Shopper Journey
+      summary: Update shipping address (if address exists)
+      description: Adds a shipping address associated with the buyer account (variable _buyerAccountId_) and stores the address identifier into the variable __addressId_.
+      operationId: updateShippingAddressIfAddressExists
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                addressType:
+                  type: string
+                  example: Shipping
+                city:
+                  type: string
+                  example: Boston
+                country:
+                  type: string
+                  example: US
+                isDefault:
+                  type: boolean
+                  example: false
+                name:
+                  type: string
+                  example: Home Address
+                postalCode:
+                  type: string
+                  example: '01234'
+                region:
+                  type: string
+                  example: MA
+                street:
+                  type: string
+                  example: 123 Main Street
+            examples:
+              Update shipping address (if address exists):
+                value:
+                  addressType: Shipping
+                  city: Boston
+                  country: US
+                  isDefault: false
+                  name: Home Address
+                  postalCode: '01234'
+                  region: MA
+                  street: 123 Main Street
+      responses:
+        '200':
+          description: ''
+      security:
+      - bearerAuth: []
+    parameters:
+    - name: webstoreId
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: buyerAccountId
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: addressId
+      in: path
+      required: true
+      schema:
+        type: string
+        example: '{{_addressId}}'
+  /services/data/v57.0/commerce/webstores/{webstoreId}/checkouts/{checkoutId}:
+    get:
+      tags:
+      - End2End Buyer/Shopper Journey
+      summary: Get checkout
+      description: Retrieves the checkout (variable __checkoutId_).
+      operationId: getCheckout
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Get checkout:
+                value: ''
+      responses:
+        '200':
+          description: ''
+      security:
+      - bearerAuth: []
+    patch:
+      tags:
+      - End2End Buyer/Shopper Journey
+      summary: Update checkout with shipping address
+      description: Sets the ship-to address associated with the checkout (variable _checkoutId) to the_ address found/created in a previous request (variable __addressId)_.
+      operationId: updateCheckoutWithShippingAddress
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                deliveryAddress:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      example: '{{_addressId}}'
+            examples:
+              Update checkout with shipping address:
+                value:
+                  deliveryAddress:
+                    id: '{{_addressId}}'
+      responses:
+        '200':
+          description: ''
+      security:
+      - bearerAuth: []
+    parameters:
+    - name: webstoreId
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: checkoutId
+      in: path
+      required: true
+      schema:
+        type: string
+        example: active
+  /services/data/v57.0/commerce/webstores/{webstoreId}/payments/token:
+    post:
+      tags:
+      - End2End Buyer/Shopper Journey
+      summary: Create a payment
+      description: |-
+        Perform a server-side payment and store the created payment token in the variable __paymentToken_.
+
+        Note: The sample payment gateway included in the store creation simply returns a dummy token.
+      operationId: createAPayment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                billingAddress:
+                  type: object
+                  properties:
+                    city:
+                      type: string
+                      example: Los Angeles
+                    country:
+                      type: string
+                      example: United States
+                    name:
+                      type: string
+                      example: John Doe
+                    postalCode:
+                      type: string
+                      example: '90001'
+                    street:
+                      type: string
+                      example: 123 Acme Drive
+                cardPaymentMethod:
+                  type: object
+                  properties:
+                    cardHolderName:
+                      type: string
+                      example: John Doe Guest
+                    cardNumber:
+                      type: string
+                      example: '4242424242424242'
+                    cardType:
+                      type: string
+                      example: Visa
+                    cvv:
+                      type: number
+                      example: 111
+                    expiryMonth:
+                      type: number
+                      example: 12
+                    expiryYear:
+                      type: number
+                      example: 2029
+            examples:
+              Create a payment:
+                value:
+                  billingAddress:
+                    city: Los Angeles
+                    country: United States
+                    name: John Doe
+                    postalCode: '90001'
+                    street: 123 Acme Drive
+                  cardPaymentMethod:
+                    cardHolderName: John Doe Guest
+                    cardNumber: '4242424242424242'
+                    cardType: Visa
+                    cvv: 111
+                    expiryMonth: 12
+                    expiryYear: 2029
+      responses:
+        '200':
+          description: ''
+      security:
+      - bearerAuth: []
+    parameters:
+    - name: webstoreId
+      in: path
+      required: true
+      schema:
+        type: string
+  /services/data/v57.0/commerce/webstores/{webstoreId}/checkouts/{checkoutId}/payments:
+    post:
+      tags:
+      - End2End Buyer/Shopper Journey
+      summary: Update checkout with payment
+      description: |-
+        Applies the payment token (variable __paymentToken_) to the checkout (variable __checkoutId_). Also sets the billing address.
+
+        Note: No checking will be done for the validity of the billing address or token. This uses the sample SalesforceAdapter provided in the sample store.
+      operationId: updateCheckoutWithPayment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                billingAddress:
+                  type: object
+                  properties:
+                    city:
+                      type: string
+                      example: Los Angeles
+                    country:
+                      type: string
+                      example: United States
+                    name:
+                      type: string
+                      example: John Doe
+                    postalCode:
+                      type: string
+                      example: '90001'
+                    region:
+                      type: string
+                      example: California
+                    street:
+                      type: string
+                      example: 123 Acme Drive
+                paymentToken:
+                  type: string
+                  example: '{{_paymentToken}}'
+                requestType:
+                  type: string
+                  example: Auth
+            examples:
+              Update checkout with payment:
+                value:
+                  billingAddress:
+                    city: Los Angeles
+                    country: United States
+                    name: John Doe
+                    postalCode: '90001'
+                    region: California
+                    street: 123 Acme Drive
+                  paymentToken: '{{_paymentToken}}'
+                  requestType: Auth
+      responses:
+        '200':
+          description: ''
+      security:
+      - bearerAuth: []
+    parameters:
+    - name: webstoreId
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: checkoutId
+      in: path
+      required: true
+      schema:
+        type: string
+        example: active
+  /services/data/v57.0/commerce/webstores/{webstoreId}/checkouts/{_checkoutId}/orders:
+    post:
+      tags:
+      - End2End Buyer/Shopper Journey
+      summary: Create Order
+      description: Checkout Payments Action
+      operationId: createOrder
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Create Order:
+                value: ''
+      responses:
+        '200':
+          description: ''
+      security:
+      - bearerAuth: []
+    parameters:
+    - name: webstoreId
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: _checkoutId
+      in: path
+      required: true
+      schema:
+        type: string
+        example: active
+  /services/data/v57.0/commerce/webstores/{webstoreId}/order-summaries:
+    get:
+      tags:
+      - End2End Buyer/Shopper Journey
+      summary: Get order summaries
+      description: Get all of the order summaries (i.e., placed orders) from the webstore.
+      operationId: getOrderSummaries
+      responses:
+        '200':
+          description: ''
+      security:
+      - bearerAuth: []
+    parameters:
+    - name: webstoreId
+      in: path
+      required: true
+      schema:
+        type: string
+  /services/data/v57.0/query/:
+    get:
+      tags:
+      - Setup Queries
+      summary: Get webstore Id
+      description: Finds and sets the _webstoreId_ variable for the webstore with the name set in the _webStoreName_ variable.
+      operationId: getWebstoreId
+      parameters:
+      - name: q
+        in: query
+        schema:
+          type: string
+          example: SELECT+Id,+Name,+Type,+Country+FROM+WebStore+WHERE+Name+=+'{{webstoreName}}'
+      responses:
+        '200':
+          description: ''
+      security:
+      - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+tags:
+- name: End2End Buyer/Shopper Journey
+  description: "The goal of this sequence is to demonstrate how different endpoints can work together to form a typical buyer/shopper use case. This use case utilizes selected API endpoint calls from different B2B/D2C domains. Variables are set/used by many of the requests; each request is designed to be executed in sequence. (Variables starting with an underscore are set in tests as the collection is executed.)\n\n**For ease of use, this use case assumes data found in a commerce B2B/D2C trial webstore created through the SFDX commerce plugin. For more information on how to create a trial webstore please see** [How to Create Scratch Orgs and Stores](https://github.com/forcedotcom/commerce-on-lightning/blob/develop/docs/setup-guide.md).\n\n## Variables Reference\n\nThe use case relies on the following variables to be set:\n\n- `orgUrl`\n- `orgId`\n- `apiVersion`\n- `webstoreName`\n- `webstoreId`\n- `buyerUsername`\n- `buyerPassword`\n- `buyerAccountId`\n- `productSearchTerm`\n    \n\n**Note:** See the collection documentation for additional details of each variable"
+- name: Setup Queries
+  description: "Uses the REST API to perform SOQL queries that are helpful in setting some of the collection variables.\n\n## Variables Reference\n\nThe use case relies on the following variables:\n\n- `orgUrl`\n- `orgUsername`\n- `orgPassword`\n- `webstoreName`\n- `buyerUsername`\n    \n\n**Note:** See the collection documentation for additional details of each variable"
+

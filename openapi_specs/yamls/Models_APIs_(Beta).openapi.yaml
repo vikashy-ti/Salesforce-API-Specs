@@ -1,0 +1,836 @@
+openapi: 3.0.3
+info:
+  title: Models APIs (Beta)
+  description: "The [Models REST API](https://developer.salesforce.com/docs/einstein/genai/guide/models-api.html) connects your application to large language models (LLMs) through the Einstein Trust Layer. It let's you:\n- run AI prompts either as standalone or as part of conversations\n- create embeddings\n- provide feedback on the generated responses.\n\n📚 [Models REST API Reference](https://developer.salesforce.com/docs/einstein/genai/references/models-api?meta=Summary)\n\n⚠️ Disclaimers:\n\n- this collection is not covered by Salesforce support and SLAs.\n    \n- [rate limits](https://developer.salesforce.com/docs/einstein/genai/guide/rate-limits.html) apply when using the API.\n    \n\n## Setup\n\nThe Models API requires access to Einstein Generative AI on your Salesforce Org. If you don't have an Org with this feature, you can get an [Einstein AI Playground org](https://trailhead.salesforce.com/content/learn/projects/quick-start-prompt-builder/get-started-with-prompt-builder) from Trailhead to experiment.\n\n1. [Fork](https://god.gw.postman.com/run-collection/12721794-582bb775-b99d-46d8-88cf-df0d3a341040?action=collection%2Ffork&source=rip_markdown&collection-url=entityId%3D12721794-582bb775-b99d-46d8-88cf-df0d3a341040%26entityType%3Dcollection%26workspaceId%3D34382471-0c97-40e5-a206-f947271665c4) this collection.\n    \n2. Follow **Step 1** (yes, only step 1!) of [these instructions](https://developer.salesforce.com/docs/einstein/genai/guide/access-models-api-with-rest.html#step-1-create-a-salesforce-app) to create a Connected App in your Salesforce Org.\n    \n3. Copy the **Consumer Key** and **Consumer Secret** values from your Connected App and paste them respectively in the `clientId` and `clientSecret` collection variables.\n    \n4. From Setup, go to `My Domain`, and then copy the value of **Current My Domain URL** into the `authDomain` collection variable.\n    \n5. Optional: pick a model from the [list of supported models](https://developer.salesforce.com/docs/einstein/genai/guide/supported-models.html), grab it's API name and save it in the `modelName` collection variable. If you don't enter a new value, `sfdc_ai__DefaultGPT35Turbo` (GPT 3.5 Turbo) is used by default.\n    \n6. Save your collection variables.\n    \n7. Open the **Authorization** tab of the Postman collection and click **Get New Access Token** at the bottom of the screen.\n    \n8. Click **Use Token**.\n    \n9. Select the **Generate text** request and click **Send** it to ensure that the collection is properly set up.\n    \n\n## Variables Reference\n\nThe collection relies on the following required variables:\n\n| Variable | Description |\n| --- | --- |\n| `authDomain` | Salesforce Org domain without `https://`. See **My Domain** in Salesforce Setup for value. |\n| `clientId` | Connected App Consumer Key. |\n| `clientSecret` | Connected App Consumer Secret. |\n| `modelName` | API name of one of the supported [Gen AI models](https://developer.salesforce.com/docs/einstein/genai/guide/supported-models.html). |\n| `_baseUrl` | The Models API base URL. Do not modify this value. |"
+  version: 1.0.0
+  contact: {}
+servers:
+- url: https://api.salesforce.com/einstein/platform/v1
+paths:
+  /models/{modelName}/generations:
+    post:
+      summary: Generate text (standalone prompt)
+      description: Generate a response based on the provided prompt.
+      operationId: generateTextStandalonePrompt
+      parameters:
+      - name: x-sfdc-app-context
+        in: header
+        schema:
+          type: string
+          example: EinsteinGPT
+        description: (Required) This value is reserved for future use. For now, specify `EinsteinGPT`.
+      - name: x-client-feature-id
+        in: header
+        schema:
+          type: string
+          example: ai-platform-models-connected-app
+        description: (Required) This value is reserved for future use. For now, specify `ai-platform-models-connected-app`.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                prompt:
+                  type: string
+                  example: What is a REST API?
+            examples:
+              Generate text (standalone prompt):
+                value:
+                  prompt: What is a REST API?
+      responses:
+        '200':
+          description: 200 - Generate text
+          headers:
+            date:
+              schema:
+                type: string
+                example: Wed, 31 Jul 2024 13:47:45 GMT
+            transfer-encoding:
+              schema:
+                type: string
+                example: chunked
+            x-b3-spanid:
+              schema:
+                type: string
+                example: 263481f253eb651b
+            x-b3-traceid:
+              schema:
+                type: string
+                example: ee36aabc5e257b50bbf678d843b60920
+            x-request-id:
+              schema:
+                type: string
+                example: 33971fe7-c492-4222-ba33-90cdde4a8448
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  generation:
+                    type: object
+                    properties:
+                      contentQuality:
+                        type: object
+                        properties:
+                          scanToxicity:
+                            type: object
+                            properties:
+                              categories:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    categoryName:
+                                      type: string
+                                      example: identity
+                                    score:
+                                      type: number
+                                      example: 0
+                                example:
+                                - categoryName: identity
+                                  score: 0
+                                - categoryName: hate
+                                  score: 0
+                                - categoryName: profanity
+                                  score: 0
+                                - categoryName: violence
+                                  score: 0
+                                - categoryName: sexual
+                                  score: 0.0001
+                                - categoryName: physical
+                                  score: 0
+                              isDetected:
+                                type: boolean
+                                example: false
+                      generatedText:
+                        type: string
+                        example: |-
+                          A REST API (Representational State Transfer Application Programming Interface) is a software architectural style for designing networked applications. It is based on a set of principles and constraints that allow different systems to communicate over the internet using the HTTP protocol.
+
+                          In a REST API, resources are exposed as URLs (Uniform Resource Locators), and different HTTP methods (such as GET, POST, PUT, DELETE) are used to perform operations on these resources. The API follows a stateless client-server communication model, where the server does not store any client state between requests.
+
+                          REST APIs are widely used for building web services and applications, as they provide a scalable, simple, and standardized way of exchanging data between different systems. They are often used in combination with JSON (JavaScript Object Notation) or XML (eXtensible Markup Language) to format the data being transferred.
+                      id:
+                        type: string
+                        example: 9570d969-3338-491f-869d-c3541b0913bb
+                      parameters:
+                        type: object
+                        properties:
+                          finish_reason:
+                            type: string
+                            example: stop
+                          index:
+                            type: number
+                            example: 0
+                          logprobs:
+                            nullable: true
+                            example: null
+                  id:
+                    type: string
+                    example: chatcmpl-9r3y59N86UGz87Z4pEffY5ZgzHajm
+                  moreGenerations:
+                    nullable: true
+                    example: null
+                  parameters:
+                    type: object
+                    properties:
+                      created:
+                        type: number
+                        example: 1722433665
+                      model:
+                        type: string
+                        example: gpt-35-turbo
+                      object:
+                        type: string
+                        example: chat.completion
+                      system_fingerprint:
+                        nullable: true
+                        example: null
+                      usage:
+                        type: object
+                        properties:
+                          completion_tokens:
+                            type: number
+                            example: 171
+                          prompt_tokens:
+                            type: number
+                            example: 13
+                          total_tokens:
+                            type: number
+                            example: 184
+                  prompt:
+                    nullable: true
+                    example: null
+              examples:
+                200 - Generate text:
+                  value:
+                    generation:
+                      contentQuality:
+                        scanToxicity:
+                          categories:
+                          - categoryName: identity
+                            score: 0
+                          - categoryName: hate
+                            score: 0
+                          - categoryName: profanity
+                            score: 0
+                          - categoryName: violence
+                            score: 0
+                          - categoryName: sexual
+                            score: 0.0001
+                          - categoryName: physical
+                            score: 0
+                          isDetected: false
+                      generatedText: |-
+                        A REST API (Representational State Transfer Application Programming Interface) is a software architectural style for designing networked applications. It is based on a set of principles and constraints that allow different systems to communicate over the internet using the HTTP protocol.
+
+                        In a REST API, resources are exposed as URLs (Uniform Resource Locators), and different HTTP methods (such as GET, POST, PUT, DELETE) are used to perform operations on these resources. The API follows a stateless client-server communication model, where the server does not store any client state between requests.
+
+                        REST APIs are widely used for building web services and applications, as they provide a scalable, simple, and standardized way of exchanging data between different systems. They are often used in combination with JSON (JavaScript Object Notation) or XML (eXtensible Markup Language) to format the data being transferred.
+                      id: 9570d969-3338-491f-869d-c3541b0913bb
+                      parameters:
+                        finish_reason: stop
+                        index: 0
+                        logprobs: null
+                    id: chatcmpl-9r3y59N86UGz87Z4pEffY5ZgzHajm
+                    moreGenerations: null
+                    parameters:
+                      created: 1722433665
+                      model: gpt-35-turbo
+                      object: chat.completion
+                      system_fingerprint: null
+                      usage:
+                        completion_tokens: 171
+                        prompt_tokens: 13
+                        total_tokens: 184
+                    prompt: null
+    parameters:
+    - name: modelName
+      in: path
+      required: true
+      schema:
+        type: string
+        example: sfdc_ai__DefaultGPT35Turbo
+      description: (Required) Configured model name.
+  /models/{modelName}/chat-generations:
+    post:
+      summary: Generate chat (conversation with context)
+      description: Generate a response based on a list of messages representing a chat conversation.
+      operationId: generateChatConversationWithContext
+      parameters:
+      - name: x-sfdc-app-context
+        in: header
+        schema:
+          type: string
+          example: EinsteinGPT
+        description: (Required) This value is reserved for future use. For now, specify `EinsteinGPT`.
+      - name: x-client-feature-id
+        in: header
+        schema:
+          type: string
+          example: ai-platform-models-connected-app
+        description: (Required) This value is reserved for future use. For now, specify `ai-platform-models-connected-app`.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                localization:
+                  type: object
+                  properties:
+                    defaultLocale:
+                      type: string
+                      example: en_US
+                    expectedLocales:
+                      type: array
+                      items:
+                        type: string
+                        example: en_US
+                      example:
+                      - en_US
+                    inputLocales:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          locale:
+                            type: string
+                            example: en_US
+                          probability:
+                            type: number
+                            example: 0.8
+                      example:
+                      - locale: en_US
+                        probability: 0.8
+                messages:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      content:
+                        type: string
+                        example: Can I use the Salesforce REST API to retrieve a record?
+                      role:
+                        type: string
+                        example: user
+                  example:
+                  - content: Can I use the Salesforce REST API to retrieve a record?
+                    role: user
+                  - content: |-
+                      Yes, you can use the Salesforce REST API to retrieve a record. The REST API provides a simple and efficient way to interact with Salesforce data using standard HTTP methods like GET, POST, PUT, and DELETE. To retrieve a record, you can use the GET method on the specific record's endpoint URL. Here's an example of how to retrieve a record using the REST API:
+
+                      1. Authenticate and obtain an access token.
+                      2. Construct the endpoint URL for the specific record you want to retrieve. The URL should follow the format: `https://instance.salesforce.com/services/data/vXX.X/sobjects/Object_Name/Record_Id`.
+                         - Replace `instance` with your Salesforce instance (e.g., `na1`).
+                         - Replace `XX.X` with the Salesforce API version you are using (e.g., `v52.0`).
+                         - Replace `Object_Name` with the API name of the object you want to retrieve a record from (e.g., `Account`).
+                         - Replace `Record_Id` with the ID of the specific record you want to retrieve.
+                      3. Make a GET request to the constructed endpoint URL, including the access token in the request headers.
+                      4. Parse the response to retrieve the record details.
+
+                      Note that you need to have the necessary permissions and access rights to retrieve records using the REST API.
+                    role: assistant
+                  - content: Nice, show me an example with "my-developer-edition" as the domain, 61.0 as the API version and "Contact" as the object.
+                    role: user
+                tags:
+                  type: object
+                  properties: {}
+            examples:
+              Generate chat (conversation with context):
+                value:
+                  localization:
+                    defaultLocale: en_US
+                    expectedLocales:
+                    - en_US
+                    inputLocales:
+                    - locale: en_US
+                      probability: 0.8
+                  messages:
+                  - content: Can I use the Salesforce REST API to retrieve a record?
+                    role: user
+                  - content: |-
+                      Yes, you can use the Salesforce REST API to retrieve a record. The REST API provides a simple and efficient way to interact with Salesforce data using standard HTTP methods like GET, POST, PUT, and DELETE. To retrieve a record, you can use the GET method on the specific record's endpoint URL. Here's an example of how to retrieve a record using the REST API:
+
+                      1. Authenticate and obtain an access token.
+                      2. Construct the endpoint URL for the specific record you want to retrieve. The URL should follow the format: `https://instance.salesforce.com/services/data/vXX.X/sobjects/Object_Name/Record_Id`.
+                         - Replace `instance` with your Salesforce instance (e.g., `na1`).
+                         - Replace `XX.X` with the Salesforce API version you are using (e.g., `v52.0`).
+                         - Replace `Object_Name` with the API name of the object you want to retrieve a record from (e.g., `Account`).
+                         - Replace `Record_Id` with the ID of the specific record you want to retrieve.
+                      3. Make a GET request to the constructed endpoint URL, including the access token in the request headers.
+                      4. Parse the response to retrieve the record details.
+
+                      Note that you need to have the necessary permissions and access rights to retrieve records using the REST API.
+                    role: assistant
+                  - content: Nice, show me an example with "my-developer-edition" as the domain, 61.0 as the API version and "Contact" as the object.
+                    role: user
+                  tags: {}
+      responses:
+        '200':
+          description: 200 - Generate chat
+          headers:
+            date:
+              schema:
+                type: string
+                example: Wed, 31 Jul 2024 14:06:50 GMT
+            transfer-encoding:
+              schema:
+                type: string
+                example: chunked
+            x-b3-spanid:
+              schema:
+                type: string
+                example: c13712a5d4c8f574
+            x-b3-traceid:
+              schema:
+                type: string
+                example: 81faf07f08a2e4929f5539a876b91483
+            x-request-id:
+              schema:
+                type: string
+                example: 12aeed54-cbef-487a-ad1f-5384d796f743
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  generationDetails:
+                    type: object
+                    properties:
+                      generations:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            content:
+                              type: string
+                              example: |-
+                                Certainly! Here's an example of how you can retrieve a record using the Salesforce REST API with the provided details:
+
+                                1. Authenticate and obtain an access token.
+                                2. Construct the endpoint URL for the specific record you want to retrieve. Assuming you want to retrieve a Contact record with the ID "003XXXXXXXXXXXXXXX", the URL would be: `https://my-developer-edition.salesforce.com/services/data/v61.0/sobjects/Contact/003XXXXXXXXXXXXXXX`.
+                                3. Make a GET request to the constructed endpoint URL, including the access token in the request headers.
+                                4. Parse the response to retrieve the record details.
+
+                                Remember to replace "my-developer-edition" with your actual Salesforce domain, "61.0" with the desired API version, and "003XXXXXXXXXXXXXXX" with the ID of the Contact record you want to retrieve.
+
+                                Here's an example using Python and the `requests` library:
+
+                                ```python
+                                import requests
+
+                                # Replace with your Salesforce access token
+                                access_token = "YOUR_ACCESS_TOKEN"
+
+                                # Construct the endpoint URL
+                                endpoint_url = "https://my-developer-edition.salesforce.com/services/data/v61.0/sobjects/Contact/003XXXXXXXXXXXXXXX"
+
+                                # Make a GET request with the access token in the headers
+                                headers = {
+                                    "Authorization": f"Bearer {access_token}",
+                                    "Content-Type": "application/json"
+                                }
+                                response = requests.get(endpoint_url, headers=headers)
+
+                                # Parse the response to retrieve the record details
+                                if response.status_code == 200:
+                                    contact_record = response.json()
+                                    print(contact_record)
+                                else:
+                                    print(f"Error: {response.status_code} - {response.text}")
+                                ```
+
+                                Make sure to replace "YOUR_ACCESS_TOKEN" with your actual Salesforce access token.
+                            contentQuality:
+                              type: object
+                              properties:
+                                scanToxicity:
+                                  type: object
+                                  properties:
+                                    categories:
+                                      type: array
+                                      items:
+                                        type: object
+                                        properties:
+                                          categoryName:
+                                            type: string
+                                            example: identity
+                                          score:
+                                            type: number
+                                            example: 0.0002
+                                      example:
+                                      - categoryName: identity
+                                        score: 0.0002
+                                      - categoryName: hate
+                                        score: 0
+                                      - categoryName: profanity
+                                        score: 0
+                                      - categoryName: violence
+                                        score: 0
+                                      - categoryName: sexual
+                                        score: 0.0005
+                                      - categoryName: physical
+                                        score: 0
+                                    isDetected:
+                                      type: boolean
+                                      example: false
+                            id:
+                              type: string
+                              example: f4b18aba-953a-4880-9c10-3ecc7aee5a6f
+                            parameters:
+                              type: object
+                              properties:
+                                finish_reason:
+                                  type: string
+                                  example: stop
+                                index:
+                                  type: number
+                                  example: 0
+                                logprobs:
+                                  nullable: true
+                                  example: null
+                            role:
+                              type: string
+                              example: assistant
+                            timestamp:
+                              type: number
+                              example: 1722434821784
+                        example:
+                        - content: |-
+                            Certainly! Here's an example of how you can retrieve a record using the Salesforce REST API with the provided details:
+
+                            1. Authenticate and obtain an access token.
+                            2. Construct the endpoint URL for the specific record you want to retrieve. Assuming you want to retrieve a Contact record with the ID "003XXXXXXXXXXXXXXX", the URL would be: `https://my-developer-edition.salesforce.com/services/data/v61.0/sobjects/Contact/003XXXXXXXXXXXXXXX`.
+                            3. Make a GET request to the constructed endpoint URL, including the access token in the request headers.
+                            4. Parse the response to retrieve the record details.
+
+                            Remember to replace "my-developer-edition" with your actual Salesforce domain, "61.0" with the desired API version, and "003XXXXXXXXXXXXXXX" with the ID of the Contact record you want to retrieve.
+
+                            Here's an example using Python and the `requests` library:
+
+                            ```python
+                            import requests
+
+                            # Replace with your Salesforce access token
+                            access_token = "YOUR_ACCESS_TOKEN"
+
+                            # Construct the endpoint URL
+                            endpoint_url = "https://my-developer-edition.salesforce.com/services/data/v61.0/sobjects/Contact/003XXXXXXXXXXXXXXX"
+
+                            # Make a GET request with the access token in the headers
+                            headers = {
+                                "Authorization": f"Bearer {access_token}",
+                                "Content-Type": "application/json"
+                            }
+                            response = requests.get(endpoint_url, headers=headers)
+
+                            # Parse the response to retrieve the record details
+                            if response.status_code == 200:
+                                contact_record = response.json()
+                                print(contact_record)
+                            else:
+                                print(f"Error: {response.status_code} - {response.text}")
+                            ```
+
+                            Make sure to replace "YOUR_ACCESS_TOKEN" with your actual Salesforce access token.
+                          contentQuality:
+                            scanToxicity:
+                              categories:
+                              - categoryName: identity
+                                score: 0.0002
+                              - categoryName: hate
+                                score: 0
+                              - categoryName: profanity
+                                score: 0
+                              - categoryName: violence
+                                score: 0
+                              - categoryName: sexual
+                                score: 0.0005
+                              - categoryName: physical
+                                score: 0
+                              isDetected: false
+                          id: f4b18aba-953a-4880-9c10-3ecc7aee5a6f
+                          parameters:
+                            finish_reason: stop
+                            index: 0
+                            logprobs: null
+                          role: assistant
+                          timestamp: 1722434821784
+                      parameters:
+                        type: object
+                        properties:
+                          created:
+                            type: number
+                            example: 1722434810
+                          model:
+                            type: string
+                            example: gpt-35-turbo
+                          object:
+                            type: string
+                            example: chat.completion
+                          system_fingerprint:
+                            nullable: true
+                            example: null
+                          usage:
+                            type: object
+                            properties:
+                              completion_tokens:
+                                type: number
+                                example: 358
+                              prompt_tokens:
+                                type: number
+                                example: 333
+                              total_tokens:
+                                type: number
+                                example: 691
+                  id:
+                    type: string
+                    example: chatcmpl-9r4GYuN1prQNl5Li2loPwlpgb6oUq
+              examples:
+                200 - Generate chat:
+                  value:
+                    generationDetails:
+                      generations:
+                      - content: |-
+                          Certainly! Here's an example of how you can retrieve a record using the Salesforce REST API with the provided details:
+
+                          1. Authenticate and obtain an access token.
+                          2. Construct the endpoint URL for the specific record you want to retrieve. Assuming you want to retrieve a Contact record with the ID "003XXXXXXXXXXXXXXX", the URL would be: `https://my-developer-edition.salesforce.com/services/data/v61.0/sobjects/Contact/003XXXXXXXXXXXXXXX`.
+                          3. Make a GET request to the constructed endpoint URL, including the access token in the request headers.
+                          4. Parse the response to retrieve the record details.
+
+                          Remember to replace "my-developer-edition" with your actual Salesforce domain, "61.0" with the desired API version, and "003XXXXXXXXXXXXXXX" with the ID of the Contact record you want to retrieve.
+
+                          Here's an example using Python and the `requests` library:
+
+                          ```python
+                          import requests
+
+                          # Replace with your Salesforce access token
+                          access_token = "YOUR_ACCESS_TOKEN"
+
+                          # Construct the endpoint URL
+                          endpoint_url = "https://my-developer-edition.salesforce.com/services/data/v61.0/sobjects/Contact/003XXXXXXXXXXXXXXX"
+
+                          # Make a GET request with the access token in the headers
+                          headers = {
+                              "Authorization": f"Bearer {access_token}",
+                              "Content-Type": "application/json"
+                          }
+                          response = requests.get(endpoint_url, headers=headers)
+
+                          # Parse the response to retrieve the record details
+                          if response.status_code == 200:
+                              contact_record = response.json()
+                              print(contact_record)
+                          else:
+                              print(f"Error: {response.status_code} - {response.text}")
+                          ```
+
+                          Make sure to replace "YOUR_ACCESS_TOKEN" with your actual Salesforce access token.
+                        contentQuality:
+                          scanToxicity:
+                            categories:
+                            - categoryName: identity
+                              score: 0.0002
+                            - categoryName: hate
+                              score: 0
+                            - categoryName: profanity
+                              score: 0
+                            - categoryName: violence
+                              score: 0
+                            - categoryName: sexual
+                              score: 0.0005
+                            - categoryName: physical
+                              score: 0
+                            isDetected: false
+                        id: f4b18aba-953a-4880-9c10-3ecc7aee5a6f
+                        parameters:
+                          finish_reason: stop
+                          index: 0
+                          logprobs: null
+                        role: assistant
+                        timestamp: 1722434821784
+                      parameters:
+                        created: 1722434810
+                        model: gpt-35-turbo
+                        object: chat.completion
+                        system_fingerprint: null
+                        usage:
+                          completion_tokens: 358
+                          prompt_tokens: 333
+                          total_tokens: 691
+                    id: chatcmpl-9r4GYuN1prQNl5Li2loPwlpgb6oUq
+    parameters:
+    - name: modelName
+      in: path
+      required: true
+      schema:
+        type: string
+        example: sfdc_ai__DefaultGPT35Turbo
+      description: (Required) Configured model name.
+  /models/{modelName}/embeddings:
+    post:
+      summary: Generate embeddings
+      description: Create an embedding vector representing the input text.
+      operationId: generateEmbeddings
+      parameters:
+      - name: x-sfdc-app-context
+        in: header
+        schema:
+          type: string
+          example: EinsteinGPT
+        description: (Required) This value is reserved for future use. For now, specify `EinsteinGPT`.
+      - name: x-client-feature-id
+        in: header
+        schema:
+          type: string
+          example: ai-platform-models-connected-app
+        description: (Required) This value is reserved for future use. For now, specify `ai-platform-models-connected-app`.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                input:
+                  type: array
+                  items:
+                    type: string
+                    example: Salesforce users are called Trailblazers
+                  example:
+                  - Salesforce users are called Trailblazers
+                  - The mascot for Salesforce users is named Astro
+                  - The mascot for Salesforce developers is a bear named Codey
+                  - The mascot for Salesforce admins is a goat named Cloudy
+                  - The mascot for Salesforce architects is an elephant named Ruth
+                localization:
+                  type: object
+                  properties:
+                    defaultLocale:
+                      type: string
+                      example: en_US
+                    expectedLocales:
+                      type: array
+                      items:
+                        type: string
+                        example: en_US
+                      example:
+                      - en_US
+                    inputLocales:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          locale:
+                            type: string
+                            example: en_US
+                          probability:
+                            type: number
+                            example: 0.8
+                      example:
+                      - locale: en_US
+                        probability: 0.8
+                tags:
+                  type: object
+                  properties: {}
+            examples:
+              Generate embeddings:
+                value:
+                  input:
+                  - Salesforce users are called Trailblazers
+                  - The mascot for Salesforce users is named Astro
+                  - The mascot for Salesforce developers is a bear named Codey
+                  - The mascot for Salesforce admins is a goat named Cloudy
+                  - The mascot for Salesforce architects is an elephant named Ruth
+                  localization:
+                    defaultLocale: en_US
+                    expectedLocales:
+                    - en_US
+                    inputLocales:
+                    - locale: en_US
+                      probability: 0.8
+                  tags: {}
+      responses:
+        '200':
+          description: ''
+    parameters:
+    - name: modelName
+      in: path
+      required: true
+      schema:
+        type: string
+        example: sfdc_ai__DefaultGPT35Turbo
+      description: (Required) Configured model name.
+  /feedback:
+    post:
+      summary: Submit feedback
+      description: Submit feedback for generated text.
+      operationId: submitFeedback
+      parameters:
+      - name: x-sfdc-app-context
+        in: header
+        schema:
+          type: string
+          example: EinsteinGPT
+        description: (Required) This value is reserved for future use. For now, specify `EinsteinGPT`.
+      - name: x-client-feature-id
+        in: header
+        schema:
+          type: string
+          example: ai-platform-models-connected-app
+        description: (Required) This value is reserved for future use. For now, specify `ai-platform-models-connected-app`.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                appFeedback:
+                  type: object
+                  properties: {}
+                appGeneration:
+                  type: string
+                  example: <string>
+                appGenerationId:
+                  type: string
+                  example: <string>
+                feedback:
+                  type: string
+                  example: GOOD
+                feedbackText:
+                  type: string
+                  example: This is an accurate description.
+                generationId:
+                  type: string
+                  example: 9570d969-3338-491f-869d-c3541b0913bb
+                id:
+                  type: string
+                  example: d123449d-afed-4abe-9a0e-19c90726d2ea
+                source:
+                  type: string
+                  example: human
+            examples:
+              Submit feedback:
+                value:
+                  appFeedback: {}
+                  appGeneration: <string>
+                  appGenerationId: <string>
+                  feedback: GOOD
+                  feedbackText: This is an accurate description.
+                  generationId: 9570d969-3338-491f-869d-c3541b0913bb
+                  id: d123449d-afed-4abe-9a0e-19c90726d2ea
+                  source: human
+      responses:
+        '202':
+          description: 200 - Submit feedback
+          headers:
+            date:
+              schema:
+                type: string
+                example: Wed, 31 Jul 2024 14:28:45 GMT
+            transfer-encoding:
+              schema:
+                type: string
+                example: chunked
+            x-b3-spanid:
+              schema:
+                type: string
+                example: 4bf6361248eaa126
+            x-b3-traceid:
+              schema:
+                type: string
+                example: 4836fc95c5e57f7e04805e6d3f2f9476
+            x-request-id:
+              schema:
+                type: string
+                example: 4ba15342-e50e-4797-a6ab-d3904917320a
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Feedback received, Thank you!
+              examples:
+                200 - Submit feedback:
+                  value:
+                    message: Feedback received, Thank you!
+components:
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://{{auth_domain}}/services/oauth2/authorize
+          tokenUrl: https://{{authDomain}}/services/oauth2/token
+          scopes:
+            '': ''
+security:
+- oauth2:
+  - ''
+tags: []
+

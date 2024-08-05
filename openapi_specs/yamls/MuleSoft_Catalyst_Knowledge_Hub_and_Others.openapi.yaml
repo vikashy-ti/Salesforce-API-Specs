@@ -1,0 +1,2080 @@
+openapi: 3.0.3
+info:
+  title: MuleSoft Catalyst Knowledge Hub & Others
+  description: Collection of Repositories from Github (MuleSoft Consulting, MuleSoft Examples or Others) that have been considered important for the MuleSoft focused Commmunity
+  version: 1.0.0
+  contact: {}
+servers:
+- url: https://maven.anypoint.mulesoft.com
+- url: https://anypoint.mulesoft.com
+- url: '{{anypoint_host}}'
+- url: https://localhost
+- url: https://random-test-data.au-s1.cloudhub.io
+- url: http://localhost
+- url: '{{url}}'
+paths:
+  ? /api/v1/organizations/{orgId}/maven/{orgId}/{applicationName}/{applicationVersion}/{applicationName}-{applicationVersion}-mule-application.jar
+  : put:
+      tags:
+      - RTF Deployment - Steps
+      summary: 1. Binary
+      description: 'API To put pom in exchange '
+      operationId: 1Binary
+      parameters:
+      - name: user-agenthost
+        in: header
+        schema:
+          type: string
+          example: Apache-Maven/3.6.2 (Java 1.8.0_222; Mac OS X 10.14.6)
+      - name: host
+        in: header
+        schema:
+          type: string
+          example: maven.anypoint.mulesoft.com
+      requestBody:
+        content: {}
+      responses:
+        '200':
+          description: ''
+    parameters:
+    - name: orgId
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: orgId
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: applicationName
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: applicationVersion
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: applicationName
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: applicationVersion
+      in: path
+      required: true
+      schema:
+        type: string
+  /api/v1/organizations/{orgId}/maven/{orgId}/{applicationName}/{applicationVersion}/{applicationName}-{applicationVersion}.pom:
+    put:
+      tags:
+      - RTF Deployment - Steps
+      summary: 2. POM
+      description: 2. POM
+      operationId: 2Pom
+      parameters:
+      - name: user-agenthost
+        in: header
+        schema:
+          type: string
+          example: Apache-Maven/3.6.2 (Java 1.8.0_222; Mac OS X 10.14.6)
+      - name: host
+        in: header
+        schema:
+          type: string
+          example: maven.anypoint.mulesoft.com
+      requestBody:
+        content: {}
+      responses:
+        '200':
+          description: ''
+    parameters:
+    - name: orgId
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: orgId
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: applicationName
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: applicationVersion
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: applicationName
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: applicationVersion
+      in: path
+      required: true
+      schema:
+        type: string
+  /workercloud/api/organizations/{orgId}/agents:
+    get:
+      tags:
+      - RTF Deployment - Steps
+      summary: 3. All RTF Agents
+      description: 3. All RTF Agents
+      operationId: 3AllRtfAgents
+      responses:
+        '200':
+          description: ''
+    parameters:
+    - name: orgId
+      in: path
+      required: true
+      schema:
+        type: string
+  /runtimefabric/api/organizations/{orgId}/targets/{targetId}:
+    get:
+      tags:
+      - RTF Deployment - Steps
+      summary: 4. Agent Details
+      description: API to get details on target id to check it is safe to deploy api to it
+      operationId: 4AgentDetails
+      responses:
+        '200':
+          description: ''
+    parameters:
+    - name: orgId
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: targetId
+      in: path
+      required: true
+      schema:
+        type: string
+  /hybrid/api/v2/organizations/{orgId}/environments/{envId}/deployments:
+    get:
+      tags:
+      - RTF Deployment - Steps
+      summary: 6. Get Deployments
+      description: 6. Get Deployments
+      operationId: 6GetDeployments
+      parameters:
+      - name: x-anypnt-org-id
+        in: header
+        schema:
+          type: string
+          example: '{{orgId}}'
+      - name: x-anypnt-env-id
+        in: header
+        schema:
+          type: string
+          example: '{{envId}}'
+      responses:
+        '200':
+          description: ''
+    post:
+      tags:
+      - RTF Deployment - Steps
+      summary: 5. Deployment
+      description: 5. Deployment
+      operationId: 5Deployment
+      parameters:
+      - name: x-anypnt-env-id
+        in: header
+        schema:
+          type: string
+          example: '{{envId}}'
+      - name: x-anypnt-org-id
+        in: header
+        schema:
+          type: string
+          example: '{{orgId}}'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                application:
+                  type: object
+                  properties:
+                    configuration:
+                      type: object
+                      properties:
+                        mule.agent.application.properties.service:
+                          type: object
+                          properties:
+                            applicationName:
+                              type: string
+                              example: '{{applicationName}}'
+                            properties:
+                              type: object
+                              properties:
+                                mule.env:
+                                  type: string
+                                  example: development
+                                name:
+                                  type: string
+                                  example: john
+                    desiredState:
+                      type: string
+                      example: STARTED
+                    ref:
+                      type: object
+                      properties:
+                        artifactId:
+                          type: string
+                          example: '{{applicationName}}'
+                        groupId:
+                          type: string
+                          example: '{{orgId}}'
+                        packaging:
+                          type: string
+                          example: jar
+                        version:
+                          type: string
+                          example: '{{applicationVersion}}'
+                name:
+                  type: string
+                  example: '{{applicationName}}'
+                target:
+                  type: object
+                  properties:
+                    deploymentSettings:
+                      type: object
+                      properties:
+                        clusteringEnabled:
+                          type: boolean
+                          example: false
+                        cpuMax:
+                          type: string
+                          example: 500m
+                        cpuReserved:
+                          type: string
+                          example: 500m
+                        lastMileSecurity:
+                          type: boolean
+                          example: false
+                        memoryMax:
+                          type: string
+                          example: 3000Mi
+                        memoryReserved:
+                          type: string
+                          example: 3000Mi
+                        publicUrl:
+                          type: string
+                          example: https://{{RTFCNAME}}/{{applicationName}}
+                        replicationFactor:
+                          type: number
+                          example: 2
+                        runtimeVersion:
+                          type: string
+                          example: 4.2.1:v1.2.19
+                    provider:
+                      type: string
+                      example: MC
+                    targetId:
+                      type: string
+                      example: '{{targetId}}'
+            examples:
+              5. Deployment:
+                value:
+                  application:
+                    configuration:
+                      mule.agent.application.properties.service:
+                        applicationName: '{{applicationName}}'
+                        properties:
+                          mule.env: development
+                          name: john
+                    desiredState: STARTED
+                    ref:
+                      artifactId: '{{applicationName}}'
+                      groupId: '{{orgId}}'
+                      packaging: jar
+                      version: '{{applicationVersion}}'
+                  name: '{{applicationName}}'
+                  target:
+                    deploymentSettings:
+                      clusteringEnabled: false
+                      cpuMax: 500m
+                      cpuReserved: 500m
+                      lastMileSecurity: false
+                      memoryMax: 3000Mi
+                      memoryReserved: 3000Mi
+                      publicUrl: https://{{RTFCNAME}}/{{applicationName}}
+                      replicationFactor: 2
+                      runtimeVersion: 4.2.1:v1.2.19
+                    provider: MC
+                    targetId: '{{targetId}}'
+      responses:
+        '200':
+          description: ''
+    parameters:
+    - name: orgId
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: envId
+      in: path
+      required: true
+      schema:
+        type: string
+  /hybrid/api/v2/organizations/{orgId}/environments/{envId}/deployments/{deploymentId}:
+    get:
+      tags:
+      - RTF Deployment - Steps
+      summary: 7. Deployment Details
+      description: 7. Deployment Details
+      operationId: 7DeploymentDetails
+      responses:
+        '200':
+          description: ''
+    patch:
+      tags:
+      - RTF Deployment - Steps
+      summary: 8. Re-Deployment
+      description: 8. Re-Deployment
+      operationId: 8ReDeployment
+      parameters:
+      - name: x-anypnt-env-id
+        in: header
+        schema:
+          type: string
+          example: '{{envId}}'
+      - name: x-anypnt-org-id
+        in: header
+        schema:
+          type: string
+          example: '{{orgId}}'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                application:
+                  type: object
+                  properties:
+                    configuration:
+                      type: object
+                      properties:
+                        mule.agent.application.properties.service:
+                          type: object
+                          properties:
+                            applicationName:
+                              type: string
+                              example: '{{applicationName}}'
+                            properties:
+                              type: object
+                              properties:
+                                key:
+                                  type: string
+                                  example: '12345'
+                                mule.env:
+                                  type: string
+                                  example: dev
+                                name:
+                                  type: string
+                                  example: none
+                    desiredState:
+                      type: string
+                      example: STARTED
+                    ref:
+                      type: object
+                      properties:
+                        artifactId:
+                          type: string
+                          example: '{{applicationName}}'
+                        groupId:
+                          type: string
+                          example: '{{orgId}}'
+                        packaging:
+                          type: string
+                          example: jar
+                        version:
+                          type: string
+                          example: '{{applicationVersion}}'
+                name:
+                  type: string
+                  example: '{{applicationName}}'
+                target:
+                  type: object
+                  properties:
+                    deploymentSettings:
+                      type: object
+                      properties:
+                        clusteringEnabled:
+                          type: boolean
+                          example: false
+                        cpuMax:
+                          type: string
+                          example: 500m
+                        cpuReserved:
+                          type: string
+                          example: 500m
+                        lastMileSecurity:
+                          type: boolean
+                          example: false
+                        memoryMax:
+                          type: string
+                          example: 3000Mi
+                        memoryReserved:
+                          type: string
+                          example: 3000Mi
+                        publicUrl:
+                          type: string
+                          example: https://{{RTFCNAME}}/{{applicationName}}
+                        replicationFactor:
+                          type: number
+                          example: 2
+                        runtimeVersion:
+                          type: string
+                          example: 4.2.1:v1.2.19
+                    provider:
+                      type: string
+                      example: MC
+                    targetId:
+                      type: string
+                      example: '{{targetId}}'
+            examples:
+              8. Re-Deployment:
+                value:
+                  application:
+                    configuration:
+                      mule.agent.application.properties.service:
+                        applicationName: '{{applicationName}}'
+                        properties:
+                          key: '12345'
+                          mule.env: dev
+                          name: none
+                    desiredState: STARTED
+                    ref:
+                      artifactId: '{{applicationName}}'
+                      groupId: '{{orgId}}'
+                      packaging: jar
+                      version: '{{applicationVersion}}'
+                  name: '{{applicationName}}'
+                  target:
+                    deploymentSettings:
+                      clusteringEnabled: false
+                      cpuMax: 500m
+                      cpuReserved: 500m
+                      lastMileSecurity: false
+                      memoryMax: 3000Mi
+                      memoryReserved: 3000Mi
+                      publicUrl: https://{{RTFCNAME}}/{{applicationName}}
+                      replicationFactor: 2
+                      runtimeVersion: 4.2.1:v1.2.19
+                    provider: MC
+                    targetId: '{{targetId}}'
+      responses:
+        '200':
+          description: ''
+    parameters:
+    - name: orgId
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: envId
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: deploymentId
+      in: path
+      required: true
+      schema:
+        type: string
+  /graph/api/v1/graphql:
+    post:
+      tags:
+      - RTF Deployment - Steps
+      summary: 9. Query Asset
+      description: 9. Query Asset
+      operationId: 9QueryAsset
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+                  example: '{assets(asset:{groupId: "{{orgId}}",assetId: "{{applicationName}}", version: "{{applicationVersion}}"}){groupId assetId version}}'
+            examples:
+              10. Query Asset and Version:
+                value:
+                  query: '{assets(asset:{groupId: "{{orgId}}",assetId: "{{applicationName}}", version: "{{applicationVersion}}"}){groupId assetId version}}'
+              9. Query Asset:
+                value:
+                  query: '{assets(asset:{groupId: "{{orgId}}",assetId: "{{applicationName}}"}){groupId assetId version}}'
+      responses:
+        '200':
+          description: ''
+  /exchange/api/v1/organizations/{orgId}/assets/{orgId}/{applicationName}/{applicationVersion}:
+    delete:
+      tags:
+      - RTF Deployment - Steps
+      summary: 11. Exchange Asset
+      description: 11. Exchange Asset
+      operationId: 11ExchangeAsset
+      parameters:
+      - name: x-delete-type
+        in: header
+        schema:
+          type: string
+          example: hard-delete
+      responses:
+        '200':
+          description: ''
+    parameters:
+    - name: orgId
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: orgId
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: applicationName
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: applicationVersion
+      in: path
+      required: true
+      schema:
+        type: string
+  /accounts/api/v2/oauth2/token:
+    post:
+      tags:
+      - CI/CD Create Proxy API - Api Manager
+      summary: 0.1 - Get  Access Token
+      description: |-
+        This request :
+        - gets acces_token for the connected app that I have created in Anypoint Platform.
+        - sets the acces_token postman environment variable to use for the following requests
+
+        client credentials grant type
+      operationId: 01GetAccessToken
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                client_id:
+                  type: string
+                  example: '{{connected_app_id}}'
+                client_secret:
+                  type: string
+                  example: '{{connected_app_secret}}'
+                grant_type:
+                  type: string
+                  example: client_credentials
+            examples:
+              0.1 - Get  Access Token:
+                value:
+                  client_id: '{{connected_app_id}}'
+                  client_secret: '{{connected_app_secret}}'
+                  grant_type: client_credentials
+      responses:
+        '200':
+          description: ''
+      security:
+      - {}
+  /accounts/api/profile:
+    get:
+      tags:
+      - CI/CD Create Proxy API - Api Manager
+      summary: 0.2 - Get Profile (org Id and Sandbox Env Id)
+      description: |-
+        This request:
+        - gets org information
+        - parse the result and search org_id by org_name and env_id by env_name
+        - sets the org_id and env_id in postman environment variables
+
+        You need to fill the org_name and env_name in postman environment variables
+        - org_name: is the business org name to which you want to depoy ex: Ozgur Business Organisation
+        - env_name: is the environement name to which you want to deplay ex: Sandbox
+      operationId: 02GetProfileOrgIdAndSandboxEnvId
+      responses:
+        '200':
+          description: ''
+      security:
+      - {}
+  /exchange/api/v1/assets:
+    post:
+      tags:
+      - CI/CD Create Proxy API - Api Manager
+      summary: 1 - Upload swagger to Exchange
+      description: |-
+        This request:
+        - uploads your swagger file to echange
+
+        you need to set your swagger path and api metadata information in body of the request.
+      operationId: 1UploadSwaggerToExchange
+      parameters:
+      - name: organisationid
+        in: header
+        schema:
+          type: string
+          example: '{{org_id}}'
+      - name: classifier
+        in: header
+        schema:
+          type: string
+          example: oas
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                apiVersion:
+                  type: string
+                  example: v1
+                asset:
+                  type: string
+                  format: binary
+                assetId:
+                  type: string
+                  example: '{{exchangeAssetId}}'
+                classifier:
+                  type: string
+                  example: oas
+                groupId:
+                  type: string
+                  example: '{{org_id}}'
+                main:
+                  type: string
+                  example: petstore_oas.json
+                name:
+                  type: string
+                  example: '{{exchangeAssetId}}'
+                organizationId:
+                  type: string
+                  example: '{{org_id}}'
+                version:
+                  type: string
+                  example: 1.0.0
+      responses:
+        '200':
+          description: ''
+      security:
+      - {}
+  /apimanager/api/v1/organizations/{organizationId}/environments/{environmentId}/apis/:
+    post:
+      tags:
+      - CI/CD Create Proxy API - Api Manager
+      summary: 2 - Create an Api From Exchange
+      description: "This request:\n- creates an API in Api Manager from an existing Exchange API (check body of the request)\n\t\t\"spec\": {\n    \t\"assetId\": \"{{exchangeAssetId}}\",\n        \"groupId\": \"{{org_id}}\",\n        \"version\": \"1.0.0\"\n    \t}\n- sets the apiId postman environment variable (this is the id of the api in api manager)"
+      operationId: 2CreateAnApiFromExchange
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                endpoint:
+                  type: object
+                  properties:
+                    deploymentType:
+                      type: string
+                      example: CH
+                    isCloudHub:
+                      type: boolean
+                      example: true
+                    muleVersion4OrAbove:
+                      type: boolean
+                      example: true
+                    proxyTemplate:
+                      type: object
+                      properties:
+                        assetVersion:
+                          type: string
+                          example: 2.1.0
+                    proxyUri:
+                      type: string
+                      example: http://0.0.0.0:8081/
+                    referencesUserDomain:
+                      type: boolean
+                      example: false
+                    responseTimeout:
+                      nullable: true
+                      example: null
+                    type:
+                      type: string
+                      example: rest
+                    uri:
+                      type: string
+                      example: https://petstore.swagger.io/v2
+                    validation:
+                      type: string
+                      example: ENABLED
+                instanceLabel:
+                  type: string
+                  example: Sandbox {{exchangeAssetId}}
+                providerId:
+                  nullable: true
+                  example: null
+                spec:
+                  type: object
+                  properties:
+                    assetId:
+                      type: string
+                      example: '{{exchangeAssetId}}'
+                    groupId:
+                      type: string
+                      example: '{{org_id}}'
+                    version:
+                      type: string
+                      example: 1.0.0
+                tags:
+                  type: array
+                  items:
+                    type: string
+                    example: internal
+                  example:
+                  - internal
+                  - test
+            examples:
+              2 - Create an Api From Exchange:
+                value:
+                  endpoint:
+                    deploymentType: CH
+                    isCloudHub: true
+                    muleVersion4OrAbove: true
+                    proxyTemplate:
+                      assetVersion: 2.1.0
+                    proxyUri: http://0.0.0.0:8081/
+                    referencesUserDomain: false
+                    responseTimeout: null
+                    type: rest
+                    uri: https://petstore.swagger.io/v2
+                    validation: ENABLED
+                  instanceLabel: Sandbox {{exchangeAssetId}}
+                  providerId: null
+                  spec:
+                    assetId: '{{exchangeAssetId}}'
+                    groupId: '{{org_id}}'
+                    version: 1.0.0
+                  tags:
+                  - internal
+                  - test
+      responses:
+        '200':
+          description: ''
+      security:
+      - {}
+    parameters:
+    - name: organizationId
+      in: path
+      required: true
+      schema:
+        type: string
+        example: '{{org_id}}'
+    - name: environmentId
+      in: path
+      required: true
+      schema:
+        type: string
+        example: '{{env_id}}'
+  /proxies/xapi/v1/organizations/{orgId}/environments/{envId}/apis/{apiId}/deployments:
+    post:
+      tags:
+      - CI/CD Create Proxy API - Api Manager
+      summary: 3 - Deploy proxy for an existing api
+      description: |-
+        This request:
+        - creates a proxy for the given apiId, domainName(must be unique, it is part of your api url), env_id and env_name
+      operationId: 3DeployProxyForAnExistingApi
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                applicationName:
+                  type: string
+                  example: '{{domainName}}'
+                environmentId:
+                  type: string
+                  example: '{{env_id}}'
+                environmentName:
+                  type: string
+                  example: '{{env_name}}'
+                gatewayVersion:
+                  type: string
+                  example: 4.3.0
+                overwrite:
+                  type: boolean
+                  example: true
+                type:
+                  type: string
+                  example: CH
+            examples:
+              3 - Deploy proxy for an existing api:
+                value:
+                  applicationName: '{{domainName}}'
+                  environmentId: '{{env_id}}'
+                  environmentName: '{{env_name}}'
+                  gatewayVersion: 4.3.0
+                  overwrite: true
+                  type: CH
+      responses:
+        '200':
+          description: ''
+      security:
+      - {}
+    parameters:
+    - name: orgId
+      in: path
+      required: true
+      schema:
+        type: string
+        example: '{{org_id}}'
+    - name: envId
+      in: path
+      required: true
+      schema:
+        type: string
+        example: '{{env_id}}'
+    - name: apiId
+      in: path
+      required: true
+      schema:
+        type: string
+        example: '{{apiId}}'
+  /cloudhub/api/v2/applications/{domainName}:
+    get:
+      tags:
+      - CI/CD Create Proxy API - Api Manager
+      summary: 3.1 - Proxy from Runtime Manager
+      description: "this request:\n- retreives the proxy API instance information from the runtime manager. \n- sets the fullDomainName postman environment variable"
+      operationId: 31ProxyFromRuntimeManager
+      parameters:
+      - name: x-anypnt-env-id
+        in: header
+        schema:
+          type: string
+          example: '{{env_id}}'
+      responses:
+        '200':
+          description: ''
+      security:
+      - {}
+    put:
+      tags:
+      - CI/CD Create Proxy API - Api Manager
+      summary: Optional - Enable monitoring/visualiser in Runtime Manager
+      description: "This request:\n- sets the analytics.agent.enabled = true in properties of the runtime\n \n\t    \"properties\": {\n\t        \"anypoint.platform.analytics_base_uri\": \"https://analytics-ingest.anypoint.mulesoft.com\",\n\t        \"anypoint.platform.client_id\": \"{{environment_app_id}}\",\n\t        \"anypoint.platform.client_secret\": \"{{environment_app_secret}}\",\n\t        \"anypoint.platform.base_uri\": \"{{anypoint_host}}\",\n\t        \"anypoint.platform.config.analytics.agent.enabled\": \"true\"\n\t    }"
+      operationId: optionalEnableMonitoringVisualiserInRuntimeManager
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ipAddresses:
+                  type: array
+                  items: {}
+                  example: []
+                logLevels:
+                  type: array
+                  items: {}
+                  example: []
+                loggingCustomLog4JEnabled:
+                  type: boolean
+                  example: false
+                loggingNgEnabled:
+                  type: boolean
+                  example: true
+                monitoringAutoRestart:
+                  type: boolean
+                  example: true
+                monitoringEnabled:
+                  type: boolean
+                  example: true
+                muleVersion:
+                  type: object
+                  properties:
+                    updateId:
+                      type: string
+                      example: 5eaaf509c695f914bb42e1ea
+                    version:
+                      type: string
+                      example: 4.3.0
+                objectStoreV1:
+                  type: boolean
+                  example: false
+                persistentQueues:
+                  type: boolean
+                  example: false
+                persistentQueuesEncrypted:
+                  type: boolean
+                  example: false
+                properties:
+                  type: object
+                  properties:
+                    anypoint.platform.analytics_base_uri:
+                      type: string
+                      example: https://analytics-ingest.anypoint.mulesoft.com
+                    anypoint.platform.base_uri:
+                      type: string
+                      example: '{{anypoint_host}}'
+                    anypoint.platform.client_id:
+                      type: string
+                      example: '{{environment_app_id}}'
+                    anypoint.platform.client_secret:
+                      type: string
+                      example: '{{environment_app_secret}}'
+                    anypoint.platform.config.analytics.agent.enabled:
+                      type: string
+                      example: 'true'
+                propertiesOptions:
+                  type: object
+                  properties:
+                    anypoint.platform.client_secret:
+                      type: object
+                      properties:
+                        secure:
+                          type: boolean
+                          example: true
+                    inbound.keystore.keyPassword:
+                      type: object
+                      properties:
+                        secure:
+                          type: boolean
+                          example: true
+                    inbound.keystore.password:
+                      type: object
+                      properties:
+                        secure:
+                          type: boolean
+                          example: true
+                    inbound.truststore.password:
+                      type: object
+                      properties:
+                        secure:
+                          type: boolean
+                          example: true
+                    outbound.keystore.keyPassword:
+                      type: object
+                      properties:
+                        secure:
+                          type: boolean
+                          example: true
+                    outbound.keystore.password:
+                      type: object
+                      properties:
+                        secure:
+                          type: boolean
+                          example: true
+                    outbound.truststore.password:
+                      type: object
+                      properties:
+                        secure:
+                          type: boolean
+                          example: true
+                region:
+                  type: string
+                  example: eu-central-1
+                secureDataGatewayEnabled:
+                  type: boolean
+                  example: false
+                staticIPsEnabled:
+                  type: boolean
+                  example: false
+                status:
+                  type: string
+                  example: STARTED
+                trackingSettings:
+                  type: object
+                  properties:
+                    trackingLevel:
+                      type: string
+                      example: DISABLED
+                workers:
+                  type: object
+                  properties:
+                    amount:
+                      type: number
+                      example: 1
+                    remainingOrgWorkers:
+                      type: number
+                      example: 3.1
+                    totalOrgWorkers:
+                      type: number
+                      example: 4
+                    type:
+                      type: object
+                      properties:
+                        cpu:
+                          type: string
+                          example: 0.1 vCores
+                        memory:
+                          type: string
+                          example: 500 MB memory
+                        name:
+                          type: string
+                          example: Micro
+                        weight:
+                          type: number
+                          example: 0.1
+            examples:
+              Optional - Enable monitoring/visualiser in Runtime Manager:
+                value:
+                  ipAddresses: []
+                  logLevels: []
+                  loggingCustomLog4JEnabled: false
+                  loggingNgEnabled: true
+                  monitoringAutoRestart: true
+                  monitoringEnabled: true
+                  muleVersion:
+                    updateId: 5eaaf509c695f914bb42e1ea
+                    version: 4.3.0
+                  objectStoreV1: false
+                  persistentQueues: false
+                  persistentQueuesEncrypted: false
+                  properties:
+                    anypoint.platform.analytics_base_uri: https://analytics-ingest.anypoint.mulesoft.com
+                    anypoint.platform.base_uri: '{{anypoint_host}}'
+                    anypoint.platform.client_id: '{{environment_app_id}}'
+                    anypoint.platform.client_secret: '{{environment_app_secret}}'
+                    anypoint.platform.config.analytics.agent.enabled: 'true'
+                  propertiesOptions:
+                    anypoint.platform.client_secret:
+                      secure: true
+                    inbound.keystore.keyPassword:
+                      secure: true
+                    inbound.keystore.password:
+                      secure: true
+                    inbound.truststore.password:
+                      secure: true
+                    outbound.keystore.keyPassword:
+                      secure: true
+                    outbound.keystore.password:
+                      secure: true
+                    outbound.truststore.password:
+                      secure: true
+                  region: eu-central-1
+                  secureDataGatewayEnabled: false
+                  staticIPsEnabled: false
+                  status: STARTED
+                  trackingSettings:
+                    trackingLevel: DISABLED
+                  workers:
+                    amount: 1
+                    remainingOrgWorkers: 3.1
+                    totalOrgWorkers: 4
+                    type:
+                      cpu: 0.1 vCores
+                      memory: 500 MB memory
+                      name: Micro
+                      weight: 0.1
+      responses:
+        '200':
+          description: ''
+      security:
+      - {}
+    parameters:
+    - name: domainName
+      in: path
+      required: true
+      schema:
+        type: string
+  /apimanager/api/v1/organizations/{organizationId}/environments/{environementId}/apis/{apiId}/tiers:
+    get:
+      tags:
+      - CI/CD Create Proxy API - Api Manager
+      summary: 4.2 - SLA tiers from an existing api
+      description: 4.2 - SLA tiers from an existing api
+      operationId: 42SlaTiersFromAnExistingApi
+      requestBody:
+        content:
+          application/json:
+            examples:
+              4.2 - SLA tiers from an existing api:
+                value: ''
+      responses:
+        '200':
+          description: ''
+      security:
+      - {}
+    post:
+      tags:
+      - CI/CD Create Proxy API - Api Manager
+      summary: 4 - Add premium SLA tiers to an existing api
+      description: "This request:\n- creates an SLA tier for an API (apiId). Body:\n\t    {\n\t\t\"status\": \"ACTIVE\",\n\t    \"autoApprove\": false,\n\t    \"limits\": [\n\t      {\n\t        \"visible\": true,\n\t        \"maximumRequests\": 5,\n\t        \"timePeriodInMilliseconds\": 1\n\t      }\n\t    ],\n\t    \"name\": \"premium\",\n\t    \"description\": \"premium description\"\n\t\t}"
+      operationId: 4AddPremiumSlaTiersToAnExistingApi
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                autoApprove:
+                  type: boolean
+                  example: true
+                description:
+                  type: string
+                  example: Free description
+                limits:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      maximumRequests:
+                        type: number
+                        example: 2
+                      timePeriodInMilliseconds:
+                        type: number
+                        example: 1000
+                      visible:
+                        type: boolean
+                        example: true
+                  example:
+                  - maximumRequests: 2
+                    timePeriodInMilliseconds: 1000
+                    visible: true
+                  - maximumRequests: 50
+                    timePeriodInMilliseconds: 60000
+                    visible: true
+                name:
+                  type: string
+                  example: Free
+                status:
+                  type: string
+                  example: ACTIVE
+            examples:
+              4 - Add premium SLA tiers to an existing api:
+                value:
+                  autoApprove: false
+                  description: premium description
+                  limits:
+                  - maximumRequests: 5
+                    timePeriodInMilliseconds: 1
+                    visible: true
+                  name: premium
+                  status: ACTIVE
+              4.1 - Add free SLA tiers to an existing api:
+                value:
+                  autoApprove: true
+                  description: Free description
+                  limits:
+                  - maximumRequests: 2
+                    timePeriodInMilliseconds: 1000
+                    visible: true
+                  - maximumRequests: 50
+                    timePeriodInMilliseconds: 60000
+                    visible: true
+                  name: Free
+                  status: ACTIVE
+      responses:
+        '200':
+          description: ''
+      security:
+      - {}
+    parameters:
+    - name: organizationId
+      in: path
+      required: true
+      schema:
+        type: string
+        example: '{{org_id}}'
+    - name: environementId
+      in: path
+      required: true
+      schema:
+        type: string
+        example: '{{env_id}}'
+    - name: apiId
+      in: path
+      required: true
+      schema:
+        type: string
+        example: '{{apiId}}'
+  /apimanager/api/v1/organizations/{organizationId}/environments/{environementId}/apis/{apiid}/policies:
+    post:
+      tags:
+      - CI/CD Create Proxy API - Api Manager
+      summary: 5 - Apply Rate limiting SLA Based policy to an existing api
+      description: 5 - Apply Rate limiting SLA Based policy to an existing api
+      operationId: 5ApplyRateLimitingSlaBasedPolicyToAnExistingApi
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                apiVersionId:
+                  type: string
+                  example: '{{apiID}}'
+                assetId:
+                  type: string
+                  example: client-id-enforcement
+                assetVersion:
+                  type: string
+                  example: 1.2.2
+                configurationData:
+                  type: object
+                  properties:
+                    clientIdExpression:
+                      type: string
+                      example: '#[attributes.headers[''client_id'']]'
+                    clientSecretExpression:
+                      type: string
+                      example: '#[attributes.headers[''client_secret'']]'
+                    credentialsOriginHasHttpBasicAuthenticationHeader:
+                      type: string
+                      example: customExpression
+                groupId:
+                  type: string
+                  example: 68ef9520-24e9-4cf2-b2f5-620025690913
+                id:
+                  nullable: true
+                  example: null
+                pointcutData:
+                  nullable: true
+                  example: null
+                policyTemplateId:
+                  type: number
+                  example: 299240
+            examples:
+              5 - Apply Rate limiting SLA Based policy to an existing api:
+                value:
+                  apiVersionId: '{{apiID}}'
+                  assetId: rate-limiting-sla-based
+                  assetVersion: 1.2.6
+                  configurationData:
+                    clientIdExpression: '#[attributes.headers[''client_id'']]'
+                    clientSecretExpression: '#[attributes.headers[''client_secret'']]'
+                    clusterizable: true
+                    exposeHeaders: true
+                  groupId: 68ef9520-24e9-4cf2-b2f5-620025690913
+                  id: null
+                  pointcutData: null
+                  policyTemplateId: 299249
+              5.2 - Apply Jwt validation policy to an existing api:
+                value: |-
+                  {
+                      "configurationData": {
+                          "jwtOrigin": "httpBearerAuthenticationHeader",
+                          "jwtExpression": "#[attributes.headers['jwt']]",
+                          "signingMethod": "rsa",
+                          "signingKeyLength": 256,
+                          "jwtKeyOrigin": "jwks",
+                          "textKey": "your-(256|384|512)-bit-secret",
+                          "jwksUrl": "http://your-jwks-service.example:80/base/path",
+                          "jwksServiceTimeToLive": 60,
+                          "skipClientIdValidation": true,
+                          "clientIdExpression": "#[vars.claimSet.client_id]",
+                          "validateAudClaim": true,
+                          "mandatoryAudClaim": false,
+                          "supportedAudiences": "aud.example.com",
+                          "mandatoryExpClaim": true,
+                          "mandatoryNbfClaim": false,
+                          "validateCustomClaim": true,
+                          "mandatoryCustomClaims": [
+                              {
+                                  "key": "Mandatory",
+                                  "value": "true"
+                              }
+                          ],
+                          "nonMandatoryCustomClaims": [
+                              {
+                                  "key": "NonMandatory",
+                                  "value": "false"
+                              }
+                          ]
+                      },
+                      "id": null,
+                      "pointcutData": null,
+                      "policyTemplateId": 299253,
+                      "apiVersionId": {{apiId}},
+                      "groupId": "68ef9520-24e9-4cf2-b2f5-620025690913",
+                      "assetId": "jwt-validation",
+                      "assetVersion": "1.1.3"
+                  }
+              Optional - Add client Id policy to an existing api:
+                value:
+                  apiVersionId: '{{apiID}}'
+                  assetId: client-id-enforcement
+                  assetVersion: 1.2.2
+                  configurationData:
+                    clientIdExpression: '#[attributes.headers[''client_id'']]'
+                    clientSecretExpression: '#[attributes.headers[''client_secret'']]'
+                    credentialsOriginHasHttpBasicAuthenticationHeader: customExpression
+                  groupId: 68ef9520-24e9-4cf2-b2f5-620025690913
+                  id: null
+                  pointcutData: null
+                  policyTemplateId: 299240
+      responses:
+        '200':
+          description: ''
+      security:
+      - {}
+    parameters:
+    - name: organizationId
+      in: path
+      required: true
+      schema:
+        type: string
+        example: '{{org_id}}'
+    - name: environementId
+      in: path
+      required: true
+      schema:
+        type: string
+        example: '{{env_id}}'
+    - name: apiid
+      in: path
+      required: true
+      schema:
+        type: string
+        example: '{{apiId}}'
+  /apimanager/api/v1/organizations/{organizationId}/environments/{environementId}/apis/{apiId}/tags/ratelimitingSLAbased:
+    put:
+      tags:
+      - CI/CD Create Proxy API - Api Manager
+      summary: '5.1 - Add Tag to an existing api #ratelimitingSLAbased'
+      description: '5.1 - Add Tag to an existing api #ratelimitingSLAbased'
+      operationId: 51AddTagToAnExistingApiRatelimitingslabased
+      responses:
+        '200':
+          description: ''
+      security:
+      - {}
+    parameters:
+    - name: organizationId
+      in: path
+      required: true
+      schema:
+        type: string
+        example: '{{org_id}}'
+    - name: environementId
+      in: path
+      required: true
+      schema:
+        type: string
+        example: '{{env_id}}'
+    - name: apiId
+      in: path
+      required: true
+      schema:
+        type: string
+        example: '{{apiId}}'
+  /apimanager/api/v1/organizations/{organizationId}/environments/{environementId}/apis/{apiId}/tags/jwt:
+    put:
+      tags:
+      - CI/CD Create Proxy API - Api Manager
+      summary: '5.3 - Add Tag to an existing api #jwt'
+      description: '5.3 - Add Tag to an existing api #jwt'
+      operationId: 53AddTagToAnExistingApiJwt
+      responses:
+        '200':
+          description: ''
+      security:
+      - {}
+    parameters:
+    - name: organizationId
+      in: path
+      required: true
+      schema:
+        type: string
+        example: '{{org_id}}'
+    - name: environementId
+      in: path
+      required: true
+      schema:
+        type: string
+        example: '{{env_id}}'
+    - name: apiId
+      in: path
+      required: true
+      schema:
+        type: string
+        example: '{{apiId}}'
+  /apimanager/api/v1/organizations/{organizationId}/environments/{environmentId}/apis:
+    get:
+      tags:
+      - CI/CD Create Proxy API - Api Manager
+      summary: 5.4 - Get Api(s) By query (tag name)
+      description: 5.4 - Get Api(s) By query (tag name)
+      operationId: 54GetApiSByQueryTagName
+      parameters:
+      - name: query
+        in: query
+        schema:
+          type: string
+          example: jwt
+      responses:
+        '200':
+          description: ''
+      security:
+      - {}
+    parameters:
+    - name: organizationId
+      in: path
+      required: true
+      schema:
+        type: string
+        example: '{{org_id}}'
+    - name: environmentId
+      in: path
+      required: true
+      schema:
+        type: string
+        example: '{{env_id}}'
+  /apimanager/api/v1/organizations/{organizationId}/policy-templates:
+    get:
+      tags:
+      - CI/CD Create Proxy API - Api Manager
+      summary: Optional - Get List of available Policies in Anypoint Platform By default
+      description: Optional - Get List of available Policies in Anypoint Platform By default
+      operationId: optionalGetListOfAvailablePoliciesInAnypointPlatformByDefault
+      responses:
+        '200':
+          description: ''
+      security:
+      - {}
+    parameters:
+    - name: organizationId
+      in: path
+      required: true
+      schema:
+        type: string
+        example: '{{org_id}}'
+  /apimanager/api/v1/organizations/{organizationId}/environments/{environementId}/apis/{apiid}/policies/{clientIdPolicyId}:
+    delete:
+      tags:
+      - CI/CD Create Proxy API - Api Manager
+      summary: Optional - Delete policy from an existing api
+      description: Optional - Delete policy from an existing api
+      operationId: optionalDeletePolicyFromAnExistingApi
+      responses:
+        '200':
+          description: ''
+      security:
+      - {}
+    parameters:
+    - name: organizationId
+      in: path
+      required: true
+      schema:
+        type: string
+        example: '{{org_id}}'
+    - name: environementId
+      in: path
+      required: true
+      schema:
+        type: string
+        example: '{{env_id}}'
+    - name: apiid
+      in: path
+      required: true
+      schema:
+        type: string
+        example: '{{apiId}}'
+    - name: clientIdPolicyId
+      in: path
+      required: true
+      schema:
+        type: string
+  /proxies/xapi/v1/organizations/{orgId}/environments/{envId}/apis/{apiId}/deployments/{proxyId}:
+    get:
+      tags:
+      - CI/CD Create Proxy API - Api Manager
+      summary: Optional - Proxy of an existing api
+      description: Retreives the proxy api settings with proxy ip returned from the previous deploy call
+      operationId: optionalProxyOfAnExistingApi
+      responses:
+        '200':
+          description: ''
+      security:
+      - {}
+    parameters:
+    - name: orgId
+      in: path
+      required: true
+      schema:
+        type: string
+        example: '{{org_id}}'
+    - name: envId
+      in: path
+      required: true
+      schema:
+        type: string
+        example: '{{env_id}}'
+    - name: apiId
+      in: path
+      required: true
+      schema:
+        type: string
+        example: '{{apiId}}'
+    - name: proxyId
+      in: path
+      required: true
+      schema:
+        type: string
+  /data:
+    post:
+      tags:
+      - Catalyst - Test-Data-Generation
+      - Random Data Generator Showcase
+      summary: Genreate Random Data in CSV
+      description: Genreate Random Data in CSV
+      operationId: genreateRandomDataInCsv
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Generate Random Data Showcase in JSON:
+                value: |-
+                  {
+                      {
+                          "title": "{{$randomNamePrefix}}",
+                          "firstname": "{{$randomFirstName}}",
+                          "lastname": "{{$randomLastName}}",
+                          "country": "{{$randomCountry}}",
+                          "phone": "{{$randomPhoneNumber}}",
+                          "accountname": "{{$randomBankAccountName}}",
+                          "balance": "{{$randomInt}}",
+                          "lasttransactiondate": "{{$randomDatePast}}"
+
+                      }
+                  }
+              Generate Random Data in JSON:
+                value: '{{jsonData}}'
+          application/xml:
+            examples:
+              Generate Random Data in XML:
+                value: '{{xmlData}}'
+          text/plain:
+            examples:
+              Genreate Random Data in CSV:
+                value: '{{csvData}}'
+      responses:
+        '200':
+          description: ''
+  /api/apis/configurations/bulk-promotions:
+    post:
+      tags:
+      - Catalyst - APIM Admin API
+      summary: POST bulk
+      description: POST bulk
+      operationId: postBulk
+      parameters:
+      - name: targetenvironmentid
+        in: header
+        schema:
+          type: string
+          example: '{ChangeMe}'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  apiAssetId:
+                    type: string
+                    example: alerts-api
+                  assetName:
+                    type: string
+                    example: alerts-api
+                  contracts:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        apiEndpoints:
+                          type: boolean
+                          example: false
+                        grantTypes:
+                          type: array
+                          items: {}
+                          example: []
+                        name:
+                          type: string
+                          example: alerts-api-stage
+                        redirectUri:
+                          type: array
+                          items: {}
+                          example: []
+                    example:
+                    - apiEndpoints: false
+                      grantTypes: []
+                      name: alerts-api-stage
+                      redirectUri: []
+                  groupId:
+                    type: string
+                    example: 185bdbc4-b359-4d57-9238-16719afe02d4
+                  sourceApiInstanceId:
+                    type: string
+                    example: '16094435'
+                  version:
+                    type: string
+                    example: 1.0.0
+                  versionGroup:
+                    type: string
+                    example: v1
+              example:
+              - apiAssetId: alerts-api
+                assetName: alerts-api
+                contracts:
+                - apiEndpoints: false
+                  grantTypes: []
+                  name: alerts-api-stage
+                  redirectUri: []
+                groupId: 185bdbc4-b359-4d57-9238-16719afe02d4
+                sourceApiInstanceId: '16094435'
+                version: 1.0.0
+                versionGroup: v1
+              - apiAssetId: alerts-api
+                assetName: alerts-api
+                contracts: []
+                groupId: 185bdbc4-b359-4d57-9238-16719afe02d4
+                sourceApiInstanceId: '16195063'
+                version: 1.0.1
+                versionGroup: v1
+            examples:
+              POST bulk:
+                value:
+                - apiAssetId: alerts-api
+                  assetName: alerts-api
+                  contracts:
+                  - apiEndpoints: false
+                    grantTypes: []
+                    name: alerts-api-stage
+                    redirectUri: []
+                  groupId: 185bdbc4-b359-4d57-9238-16719afe02d4
+                  sourceApiInstanceId: '16094435'
+                  version: 1.0.0
+                  versionGroup: v1
+                - apiAssetId: alerts-api
+                  assetName: alerts-api
+                  contracts: []
+                  groupId: 185bdbc4-b359-4d57-9238-16719afe02d4
+                  sourceApiInstanceId: '16195063'
+                  version: 1.0.1
+                  versionGroup: v1
+      responses:
+        '200':
+          description: ''
+  /api/apis:
+    get:
+      tags:
+      - Catalyst - APIM Admin API
+      summary: GET apis
+      description: GET apis
+      operationId: getApis
+      parameters:
+      - name: sourceenvironmentid
+        in: header
+        schema:
+          type: string
+          example: '{ChangeMe}'
+      - name: contractsuffixtobereplaced
+        in: header
+        schema:
+          type: string
+          example: tst
+      - name: contractsuffixreplacement
+        in: header
+        schema:
+          type: string
+          example: stage
+      - name: apinameincludeifcontains
+        in: header
+        schema:
+          type: string
+          example: alerts
+      - name: apinameexcludeifstartswith
+        in: header
+        schema:
+          type: string
+          example: alerts
+      responses:
+        '200':
+          description: ''
+  /api/applications:
+    get:
+      tags:
+      - Catalyst - APIM Admin API
+      summary: GET apps
+      description: GET apps
+      operationId: getApps
+      parameters:
+      - name: includecredentials
+        in: header
+        schema:
+          type: string
+          example: 'true'
+      responses:
+        '200':
+          description: ''
+  /api/applications/{id}:
+    delete:
+      tags:
+      - Catalyst - APIM Admin API
+      summary: DELETE an app
+      description: DELETE an app
+      operationId: deleteAnApp
+      responses:
+        '200':
+          description: ''
+    parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  /api/business-metrics:
+    get:
+      tags:
+      - Catalyst - Metrics Toolkit
+      - Benefits
+      summary: Get Benefits
+      description: Get Benefits
+      operationId: getBenefits
+      parameters:
+      - name: developAPIHistoricTime
+        in: query
+        schema:
+          type: string
+          example: '20'
+      - name: developAPICurrentTime
+        in: query
+        schema:
+          type: string
+          example: '10'
+      - name: maintainAPIHistoricTime
+        in: query
+        schema:
+          type: string
+          example: '15'
+      - name: maintainAPICurrentTime
+        in: query
+        schema:
+          type: string
+          example: '7'
+      - name: developerDayRate
+        in: query
+        schema:
+          type: string
+          example: '200'
+      requestBody:
+        content:
+          text/plain:
+            examples:
+              Get Benefits:
+                value: ''
+      responses:
+        '200':
+          description: ''
+  /api/business-metrics/load:
+    post:
+      tags:
+      - Catalyst - Metrics Toolkit
+      - Benefits
+      summary: Benefits Load - Splunk
+      description: Benefits Load - Splunk
+      operationId: benefitsLoadSplunk
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                event:
+                  type: object
+                  properties:
+                    businessGroup:
+                      type: string
+                      example: Any
+                    date:
+                      type: string
+                      example: 2020-02-19T00:11:34.341-08:00
+                    developAPICurrentTime:
+                      type: number
+                      example: 4
+                    developAPIHistoricTime:
+                      type: number
+                      example: 20
+                    developerDayRate:
+                      type: number
+                      example: 500
+                    maintainAPICurrentTime:
+                      type: number
+                      example: 1
+                    maintainAPIHistoricTime:
+                      type: number
+                      example: 20
+                loaderDetails:
+                  type: object
+                  properties:
+                    rawData:
+                      type: string
+                      example: 'false'
+                    sfdc:
+                      type: object
+                      properties:
+                        appName:
+                          type: string
+                          example: IPAAS_Anypoint_Metrics_App
+                        dataSetName:
+                          type: string
+                          example: IPAAS_Benefits_Metrics_DataSet
+                        notificationEmail:
+                          type: string
+                          example: myemail@email.com
+                        password:
+                          type: string
+                          example: password123
+                        securityToken:
+                          type: string
+                          example: securityToken456
+                        sendNotifications:
+                          type: string
+                          example: FAILURES
+                        username:
+                          type: string
+                          example: my-user@salesforce.com
+                    strategy:
+                      type: string
+                      example: sfdc
+            examples:
+              Benefits Load - JSON:
+                value:
+                  event:
+                    businessGroup: Any
+                    date: 2020-02-19T00:11:34.341-08:00
+                    developAPICurrentTime: 4
+                    developAPIHistoricTime: 20
+                    developerDayRate: 500
+                    maintainAPICurrentTime: 1
+                    maintainAPIHistoricTime: 20
+                  loaderDetails:
+                    rawData: 'false'
+                    strategy: json
+              Benefits Load - SFDC:
+                value:
+                  event:
+                    businessGroup: Any
+                    date: 2020-02-19T00:11:34.341-08:00
+                    developAPICurrentTime: 4
+                    developAPIHistoricTime: 20
+                    developerDayRate: 500
+                    maintainAPICurrentTime: 1
+                    maintainAPIHistoricTime: 20
+                  loaderDetails:
+                    rawData: 'false'
+                    sfdc:
+                      appName: IPAAS_Anypoint_Metrics_App
+                      dataSetName: IPAAS_Benefits_Metrics_DataSet
+                      notificationEmail: myemail@email.com
+                      password: password123
+                      securityToken: securityToken456
+                      sendNotifications: FAILURES
+                      username: my-user@salesforce.com
+                    strategy: sfdc
+              Benefits Load - Splunk:
+                value:
+                  event:
+                    businessGroup: Any
+                    date: 2020-02-19T00:11:34.341-08:00
+                    developAPICurrentTime: 4
+                    developAPIHistoricTime: 20
+                    developerDayRate: 500
+                    maintainAPICurrentTime: 1
+                    maintainAPIHistoricTime: 20
+                  loaderDetails:
+                    rawData: 'false'
+                    splunk:
+                      host: splunk.customer.com
+                      platformBenefitsIndex: platform_benefits
+                      platformMetricsIndex: metrics
+                      port: '8088'
+                      protocol: HTTP
+                      source: metrics-source
+                      sourceType: _json
+                      token: '123456789546654654'
+                    strategy: splunk
+      responses:
+        '200':
+          description: ''
+  /api/platform-metrics:
+    get:
+      tags:
+      - Catalyst - Metrics Toolkit
+      - Platform Metrics
+      summary: Get Platform Metrics
+      description: Get Platform Metrics
+      operationId: getPlatformMetrics
+      parameters:
+      - name: raw
+        in: query
+        schema:
+          type: string
+          example: 'false'
+      requestBody:
+        content:
+          text/plain:
+            examples:
+              Get Platform Metrics:
+                value: ''
+      responses:
+        '200':
+          description: ''
+  /api/platform-metrics/load:
+    post:
+      tags:
+      - Catalyst - Metrics Toolkit
+      - Platform Metrics
+      summary: Platform Metrics Load - Splunk
+      description: Platform Metrics Load - Splunk
+      operationId: platformMetricsLoadSplunk
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                collectors:
+                  type: array
+                  items:
+                    type: string
+                    example: all
+                  example:
+                  - all
+                loaderDetails:
+                  type: object
+                  properties:
+                    rawData:
+                      type: string
+                      example: 'false'
+                    sfdc:
+                      type: object
+                      properties:
+                        appName:
+                          type: string
+                          example: IPAAS_Anypoint_Metrics_App
+                        dataSetName:
+                          type: string
+                          example: IPAAS_Benefits_Metrics_DataSet
+                        notificationEmail:
+                          type: string
+                          example: myemail@email.com
+                        password:
+                          type: string
+                          example: password123
+                        securityToken:
+                          type: string
+                          example: securityToken456
+                        sendNotifications:
+                          type: string
+                          example: FAILURES
+                        username:
+                          type: string
+                          example: my-user@salesforce.com
+                    strategy:
+                      type: string
+                      example: sfdc
+            examples:
+              Platform Metrics Load - CSV:
+                value:
+                  collectors:
+                  - all
+                  loaderDetails:
+                    rawData: 'false'
+                    strategy: csv
+              Platform Metrics Load - JSON:
+                value:
+                  collectors:
+                  - all
+                  loaderDetails:
+                    rawData: 'false'
+                    strategy: json
+              Platform Metrics Load - Logger:
+                value:
+                  collectors:
+                  - all
+                  loaderDetails:
+                    rawData: 'false'
+                    strategy: logger
+              Platform Metrics Load - SFDC:
+                value:
+                  collectors:
+                  - all
+                  loaderDetails:
+                    rawData: 'false'
+                    sfdc:
+                      appName: IPAAS_Anypoint_Metrics_App
+                      dataSetName: IPAAS_Benefits_Metrics_DataSet
+                      notificationEmail: myemail@email.com
+                      password: password123
+                      securityToken: securityToken456
+                      sendNotifications: FAILURES
+                      username: my-user@salesforce.com
+                    strategy: sfdc
+              Platform Metrics Load - Splunk:
+                value:
+                  collectors:
+                  - all
+                  loaderDetails:
+                    rawData: 'false'
+                    splunk:
+                      host: localhost
+                      platformBenefitsIndex: platform_benefits
+                      platformMetricsIndex: metrics
+                      port: '8088'
+                      protocol: HTTP
+                      source: metrics-source
+                      sourceType: _json
+                      token: 10324b27-3735-40d7-9db7-cc76f6fb4c9f
+                    strategy: splunk
+              Platform Metrics Load - Tableau:
+                value:
+                  collectors:
+                  - all
+                  loaderDetails:
+                    rawData: 'false'
+                    strategy: tableau
+                    tableau:
+                      outputDir: /opt/metrics-toolkit/data
+      responses:
+        '200':
+          description: ''
+components:
+  securitySchemes: {}
+tags:
+- name: RTF Deployment - Steps
+  description: "# **RTF Deployment**\n\nPostman Collection for the deployment of Runtime Fabric application using the Anypoint Platform APIs.This is while RTF does not support AnypointCLI.\n\n## Github Repo: [https://github.com/mulesoft-consulting/rtf-deployment-scripts](https://github.com/mulesoft-consulting/rtf-deployment-scripts)\n\nExtract below from the Blog post ([https://blogs.mulesoft.com/dev-guides/how-to-tutorials/migrating-on-premises-standalone-apps-to-runtime-fabric/](https://blogs.mulesoft.com/dev-guides/how-to-tutorials/migrating-on-premises-standalone-apps-to-runtime-fabric/))\n\nCICD pipelines to support the Runtime Fabric deployments. Runtime Fabric has some additional steps to upload deployment jar in Exchange. Before a MuleSoft application can be deployed into Runtime Fabric, the deployable jar should be uploaded to Anypoint Exchange.\n\nAnypoint Exchange acts as an artifact repository for MuleSoft applications. You should make sure that no other artifact with the same artifact ID as the MuleSoft application name exists inside Anypoint Exchange with a different artifact type or else it will return an error.\n\nMultiple versions of the deployment jar in Exchange helps you with rollback and rolling updates. MuleSoft application jar can be published into Exchange using:\n\n- Anypoint Studio\n- Manually\n- Maven plugin\n- Anypoint Platform APIs\n    \n\n<img src=\"https://blogs.mulesoft.com/wp-content/uploads/image-18-1024x686.png\">\n\n# Authors\n\nAmit Jha and Sandeep Deshmukh\n\n<img src=\"https://blogs.mulesoft.com/wp-content/uploads/sandeep.jpg\">"
+- name: CI/CD Create Proxy API - Api Manager
+  description: "# Deploy a Proxy API in Anypoint Platform with Postman\n\n## Github Repo: [https://github.com/ozgurkarahan/Mulesoft-Api-Manager-CI-CD-Postman](https://github.com/ozgurkarahan/Mulesoft-Api-Manager-CI-CD-Postman)\n\nIt has been long time that I wanted to write a post on how to automate API proxy deployment by only Platform API calls.\n\nMost of the time I do démo with UI to my prospects on API Manager topics and I have always the same question coming from them: “How are we going to add this to our CI/CD pipeline.”\n\nSo I have decided to show by only using API calls how we can import your swagger to Anypoint Exchange, Create the proxy, deploy it, add SLA tiers, apply policies, tag it then activate monitoring with only one postman collection.\n\nThe steps the collection contains are:\n\n- Import your swagger file to Anypoint Exchange\n- Create an API in API Manager from an API in Exchange\n- Deploy the API proxy to Runtime Manager\n- Add SLA tiers ( Free, Premium) to your API in Anypoint API Manager\n- Apply the following policies to your API in Anypoint API Manager:\n    - Rate Limiting SLA Based policy\n    - JWT Validation Policy\n- Tag your API\n- Activate Monitoring and Visualiser on Anypoint Runtime Manager for your API\n    \n\nFor this postman collection I have only used the APIs available on [Anypoint Platform APIs](https://anypoint.mulesoft.com/exchange/portals/anypoint-platform/).\n\nYou should run by order the API Calls as it is already ordered in postman collection. Because each API call gets the values from the response and sets the postman environment variables that will be used for the following API calls.\n\n## Pre-requisite\n\n1. You should create a connected app (Access Management → Connected Apps) with the following scopes on your choose of Business org and Environment: Runtime Manager, Exchange Contributor, API Manager, CloudHub Org Admin\n2. Your swagger file\n3. Your Business Group Name (the name of the business org to which you want to deploy)\n4. Your Environment Name ( the name of the environment to which your want to deploy)\n5. Your Environment client_id and client_secret (we need it to activate monitoring)\n6. Import the Postman Collection file to your Postman ( \\[GitHub repository\\]([https://github.com/ozgurkarahan/Mulesoft-Api-Manager-CI-CD-Postman/blob/master/CI-CD](https://github.com/ozgurkarahan/Mulesoft-Api-Manager-CI-CD-Postman/blob/master/CI-CD) Create Proxy API - Api Manager.postman_collection.json) )\n7. Import the Postman environment variables to your Postman (\\[GitHub Repository\\]([https://github.com/ozgurkarahan/Mulesoft-Api-Manager-CI-CD-Postman/blob/master/CI-CD](https://github.com/ozgurkarahan/Mulesoft-Api-Manager-CI-CD-Postman/blob/master/CI-CD) Create Proxy API - Api Manager.postman_environment.json))\n    \n\n## Postman Environment variables\n\nThe following postman environment variables must be filled in:\n\n- anypoint_host: [https://anypoint.mulesoft.com](https://anypoint.mulesoft.com/)\n- connected_app_id: The id of the connected app you have created in the pre-requisite step 1\n- connected_app_secret: The id of the connected app you have created in the pre-requisite step 1\n- env_name: The name of the environment to which you want to deploy your API. ex: Sandbox, Design or Production\n- org_name: The name of Anypoint Business Group to which you want to publish your API\n- environment_app_id: your environment client Id that you have get from the pre-requisite step 6\n- environment_app_secret: your environment client secret that you have get from the pre-requisite step 6\n- domainName: The domain name you want to use as part of your API URI. _It will be the identifier of you app in RM_, it must be unique. ( `domainname`\\-[de-c1.cloudhub.io](http://de-c1.cloudhub.io/))\n- exchangeAssetId: The assetId that will be used in Anypoint Exchange\n    \n\n## Steps in Postman Collection\n\n_**The very first two steps are the preparation requests to get access token, env_id and org_id**_\n\n### 0.1 - Get Access Token (POST)\n\nThis steps calls the token endpoint to get an access_token to be used as bearer token for the following steps.\n\n- gets acces_token for the connected app that I have created in Anypoint Platform.\n- sets the acces_token in postman environment variable to use for the following requests\n    \n\n### 0.2 - Get Profile (org Id and Sandbox Env Id) (GET)\n\nFor the most of the following steps you will need environment id and organisation id. This request calls the accounts/api/profile to get information on your platform (business org, env, ...). The env_name and org_name variable let us to query the response result and extract Ids\n\n_**Once we have the variable set for: access_token, org_id and env_id, then we can import the swagger to Exchange, create your api in api manager and depoy the proxy instance to CloudHub via runtime manager**_\n\n### 1 - Upload swagger to Exchange (POST)\n\nThis request will add your swagger to exchange. Check the body of the request to customise the parameters. The important one is the _**asset**_: you should give the full path to your swagger file as value to asset.\n\n### 2 - Create an Api From Exchange (POST)\n\nCreates an API in Api Manager from an existing Exchange API (check body of the request if you want to customise it). It sets apiId postman environment variable from the response.\n\n### 3 - Deploy proxy for an existing api (POST)\n\nCreates a proxy for the given apiId, domainName(must be unique, it is part of your api url), env_id and env_name\n\n_**Now your API is imported to exchange, created in API Manager and deployed to Runtime Manager. The following steps are to customise your APIs: SLA Tiers (Subscription), Policies, Tag and activate monitoring on your API.**_\n\n### 4 - Add premium SLA tiers to an existing api (POST)\n\nThis request creates a SLA tiers for the given apiId. Check body of the request to customise it\n\n### 4.1 - Add free SLA tiers to an existing api (POST)\n\nThis request creates a SLA tiers for the given apiId. Check body of the request to customise it\n\n### 4.2 - SLA tiers from an existing api (GET)\n\nYou can use this request to check the SLA tiers created previsouly\n\n### 5 - Apply Rate limiting SLA Based policy to an existing api\n\nApplies the standard Rate limiting SLA based policy to your API. This policy wil use the SLA tiers defined in the previous steps.\n\n### 5.1 - Add Tag to an existing api #ratelimitingSLAbased\n\nAdd the following tag to your api: ratelimitingSLAbased\n\n### 5.2 - Apply Jwt validation policy to an existing api\n\nApplies the standard JWT validation policy to your API. Check the body of the request to customise your settings.\n\n### 5.3 - Add Tag to an existing api #jwt\n\nAdd the following tag to your api: jwt\n\n### 5.4 - Get Api(s) By query (tag name)\n\nYou can query your API manager by tag name. This lets you to tag your API properly to set a context than query easily all APIs with the specific tags\n\n### Optional - Enable monitoring/visualiser in Runtime Manager\n\nThis steps is optional. It lets you to activate monitoring and visualiser on your proxy app in runtime manager."
+- name: Catalyst - Test-Data-Generation
+  description: "# [Test-Data-Generation](https://github.com/mulesoft-catalyst/Test-Data-Generation)\n\nThis is a pass through API, used for generation of bulk data using Postman. The postman scripts are checked in src/test/resources folder\n\n- showcase-postman-collection.json\n- localhost-random-data-generation-postman-collection.json\n- cloudhub-random-data-generation-postman-collection.json\n    \n\nComplete article: [https://catalyst.mulesoft.com/display/OBD/Test+Data+Generation](https://catalyst.mulesoft.com/display/OBD/Test+Data+Generation)\n\nAs always, feel free to reachout [mukesh.rijhwani@mulesoft.com](mailto:mukesh.rijhwani@mulesoft.com)\n\n# Repo: [https://github.com/mulesoft-catalyst/Test-Data-Generation](https://github.com/mulesoft-catalyst/Test-Data-Generation)"
+- name: Random Data Generator Collection (localhost)
+- name: Random Data Generator Connection (Cloudhub)
+- name: Random Data Generator Showcase
+- name: Catalyst - APIM Admin API
+  description: "# API Manager Promotions Tool\n\n### Github Repo: [https://github.com/mulesoft-consulting/api-manager-promotions-admin-api](https://github.com/mulesoft-consulting/api-manager-promotions-admin-api)\n\nThis asset is a Mule API that connects with Anypoint Platform APIs (in particular, APIManager, Core Services and Exchange) to perform operations such as:\n\n- Bulk promotion of APIs from a source environment to a target environment given a list of APIs to promote\n- Get APIs and contracts from a source environment (with options to replace contract name suffix to respect a naming convention, for instance)\n- Get Client Apps created\n- Delete Client Apps created\n    \n\nAPI design and definitions are included.\n\nThis is an [UNLICENSED software, please review the considerations](https://github.com/mulesoft-catalyst/api-manager-promotions-admin-api/blob/main/UNLICENSE.md). If you need assistance for extending this, contact MuleSoft Professional Services.\n\nEnjoy and provide feedback / contribute :)\n\n## Authors\n\nJoel Melamed and [Contributors](https://github.com/mulesoft-catalyst/api-manager-promotions-admin-api/graphs/contributors)"
+- name: Catalyst - Metrics Toolkit
+- name: Benefits
+- name: Platform Metrics
+
